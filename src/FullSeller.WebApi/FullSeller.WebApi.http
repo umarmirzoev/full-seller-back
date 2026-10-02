@@ -1,0 +1,6 @@
+@FullSeller.WebApi_HostAddress = http://localhost:5228
+
+GET {{FullSeller.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

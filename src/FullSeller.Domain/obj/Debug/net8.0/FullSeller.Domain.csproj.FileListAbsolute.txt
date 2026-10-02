@@ -1,0 +1,11 @@
+C:\Users\HP\Desktop\full-seller-back\src\FullSeller.Domain\bin\Debug\net8.0\FullSeller.Domain.deps.json
+C:\Users\HP\Desktop\full-seller-back\src\FullSeller.Domain\bin\Debug\net8.0\FullSeller.Domain.dll
+C:\Users\HP\Desktop\full-seller-back\src\FullSeller.Domain\bin\Debug\net8.0\FullSeller.Domain.pdb
+C:\Users\HP\Desktop\full-seller-back\src\FullSeller.Domain\obj\Debug\net8.0\FullSeller.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\HP\Desktop\full-seller-back\src\FullSeller.Domain\obj\Debug\net8.0\FullSeller.Domain.AssemblyInfoInputs.cache
+C:\Users\HP\Desktop\full-seller-back\src\FullSeller.Domain\obj\Debug\net8.0\FullSeller.Domain.AssemblyInfo.cs
+C:\Users\HP\Desktop\full-seller-back\src\FullSeller.Domain\obj\Debug\net8.0\FullSeller.Domain.csproj.CoreCompileInputs.cache
+C:\Users\HP\Desktop\full-seller-back\src\FullSeller.Domain\obj\Debug\net8.0\FullSeller.Domain.dll
+C:\Users\HP\Desktop\full-seller-back\src\FullSeller.Domain\obj\Debug\net8.0\refint\FullSeller.Domain.dll
+C:\Users\HP\Desktop\full-seller-back\src\FullSeller.Domain\obj\Debug\net8.0\FullSeller.Domain.pdb
+C:\Users\HP\Desktop\full-seller-back\src\FullSeller.Domain\obj\Debug\net8.0\ref\FullSeller.Domain.dll
