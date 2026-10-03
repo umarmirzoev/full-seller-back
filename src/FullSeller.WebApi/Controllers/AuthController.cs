@@ -29,6 +29,21 @@ public class AuthController : ControllerBase
         return Ok(tokens);
     }
 
+    /// <summary>Вход по номеру телефона и паролю.</summary>
+    [HttpPost("login")]
+    public async Task<ActionResult<TokenPairResponse>> Login([FromBody] PasswordLoginRequest dto, CancellationToken ct)
+        => Ok(await _authService.LoginWithPasswordAsync(dto.Phone, dto.Password, ct));
+
+    /// <summary>Регистрация: код из SMS (см. otp/request) + пароль.</summary>
+    [HttpPost("register")]
+    public async Task<ActionResult<TokenPairResponse>> Register([FromBody] RegisterRequest dto, CancellationToken ct)
+        => Ok(await _authService.RegisterAsync(dto.Phone, dto.Code, dto.Password, ct));
+
+    /// <summary>Сброс пароля по коду из SMS.</summary>
+    [HttpPost("password/reset")]
+    public async Task<ActionResult<TokenPairResponse>> ResetPassword([FromBody] ResetPasswordRequest dto, CancellationToken ct)
+        => Ok(await _authService.ResetPasswordAsync(dto.Phone, dto.Code, dto.Password, ct));
+
     [HttpPost("telegram")]
     public async Task<ActionResult<TokenPairResponse>> LoginWithTelegram([FromBody] TelegramAuthRequest dto, CancellationToken ct)
     {

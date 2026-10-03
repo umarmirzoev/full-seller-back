@@ -14,6 +14,10 @@ public interface IUserRepository
     Task<Guid> CreateAsync(User user, CancellationToken ct = default);
     Task UpdateAsync(User user, CancellationToken ct = default);
 
+    /// <summary>PBKDF2-хеш пароля пользователя (null — пароль ещё не задан).</summary>
+    Task<string?> GetPasswordHashAsync(Guid userId, CancellationToken ct = default);
+    Task SetPasswordHashAsync(Guid userId, string passwordHash, CancellationToken ct = default);
+
     /// <summary>Список пользователей для админ-панели: поиск по телефону/имени, фильтр по роли, постранично.</summary>
     Task<PagedResult<User>> GetAllAsync(int page, int pageSize, string? search = null, UserRole? role = null, CancellationToken ct = default);
 

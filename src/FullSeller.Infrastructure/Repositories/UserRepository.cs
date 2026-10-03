@@ -63,6 +63,22 @@ public class UserRepository : SqlRepositoryBase, IUserRepository
         await cmd.ExecuteNonQueryAsync(ct);
     }, ct);
 
+    public Task<string?> GetPasswordHashAsync(Guid userId, CancellationToken ct = default) => RunAsync(async (conn, tx) =>
+    {
+        using var cmd = CreateCommand(conn, tx, "SELECT PasswordHash FROM Users WHERE Id = @Id");
+        cmd.Parameters.AddWithValue("@Id", userId);
+        var result = await cmd.ExecuteScalarAsync(ct);
+        return result is null or DBNull ? null : (string)result;
+    }, ct);
+
+    public Task SetPasswordHashAsync(Guid userId, string passwordHash, CancellationToken ct = default) => RunAsync(async (conn, tx) =>
+    {
+        using var cmd = CreateCommand(conn, tx, "UPDATE Users SET PasswordHash = @Hash WHERE Id = @Id");
+        cmd.Parameters.AddWithValue("@Hash", passwordHash);
+        cmd.Parameters.AddWithValue("@Id", userId);
+        await cmd.ExecuteNonQueryAsync(ct);
+    }, ct);
+
     public Task<PagedResult<User>> GetAllAsync(int page, int pageSize, string? search = null, UserRole? role = null, CancellationToken ct = default) => RunAsync(async (conn, tx) =>
     {
         var where = new StringBuilder("WHERE 1=1");

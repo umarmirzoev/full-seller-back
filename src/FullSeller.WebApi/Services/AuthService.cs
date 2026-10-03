@@ -14,10 +14,61 @@ public class AuthService
     private readonly ISmsSender _smsSender;
     private readonly ITelegramAuthValidator _telegramAuthValidator;
     private readonly ITokenService _tokenService;
+    private readonly IConfiguration _configuration;
 
     private const int OtpLifetimeMinutes = 5;
     private const int MaxOtpAttempts = 5;
     private const int RefreshTokenLifetimeDays = 30;
+    private const int MinPasswordLength = 6;
+
+    /// <summary>Единый формат номера: "+" и только цифры ("+992 97 911-70-07" → "+992979117007").</summary>
+    public static string NormalizePhone(string? phone)
+    {
+        var digits = new string((phone ?? string.Empty).Where(char.IsDigit).ToArray());
+        if (digits.Length < 9 || digits.Length > 15)
+            throw new InvalidOperationException("Введите корректный номер телефона.");
+        return "+" + digits;
+    }
+
+    private static void ValidatePassword(string? password)
+    {
+        if (string.IsNullOrEmpty(password) || password.Length < MinPasswordLength)
+            throw new InvalidOperationException($"Пароль должен быть не короче {MinPasswordLength} символов.");
+        if (password.Length > 100)
+            throw new InvalidOperationException("Пароль слишком длинный.");
+    }
+
+    /// <summary>Тестовый аккаунт для проверки в Google Play / App Store: номер и постоянный код
+    /// задаются в appsettings (Auth:ReviewPhone, Auth:ReviewCode); SMS на него не отправляется.</summary>
+    private bool IsReviewLogin(string phone, string? code = null)
+    {
+        var reviewPhone = _configuration["Auth:ReviewPhone"];
+        var reviewCode = _configuration["Auth:ReviewCode"];
+        if (string.IsNullOrWhiteSpace(reviewPhone) || string.IsNullOrWhiteSpace(reviewCode)) return false;
+        string normalized;
+        try { normalized = NormalizePhone(reviewPhone); } catch { return false; }
+        return normalized == phone && (code is null || code.Trim() == reviewCode.Trim());
+    }
+
+    /// <summary>Проверяет одноразовый код и помечает его использованным.</summary>
+    private async Task VerifyOtpAsync(string phone, string code, CancellationToken ct)
+    {
+        if (IsReviewLogin(phone, code)) return;
+
+        var otp = await _otpRepository.GetActiveByPhoneAsync(phone, ct)
+            ?? throw new InvalidOperationException("Код не найден или истёк. Запросите новый.");
+
+        if (otp.Attempts >= MaxOtpAttempts)
+            throw new InvalidOperationException("Превышено число попыток. Запросите новый код.");
+
+        if (otp.CodeHash != _tokenService.HashToken((code ?? string.Empty).Trim()))
+        {
+            await _otpRepository.IncrementAttemptsAsync(otp.Id, ct);
+            throw new InvalidOperationException("Неверный код.");
+        }
+
+        await _otpRepository.MarkUsedAsync(otp.Id, ct);
+    }
 
     public AuthService(
         IOtpRepository otpRepository,
@@ -25,8 +76,10 @@ public class AuthService
         IRefreshTokenRepository refreshTokenRepository,
         ISmsSender smsSender,
         ITelegramAuthValidator telegramAuthValidator,
-        ITokenService tokenService)
+        ITokenService tokenService,
+        IConfiguration configuration)
     {
+        _configuration = configuration;
         _otpRepository = otpRepository;
         _userRepository = userRepository;
         _refreshTokenRepository = refreshTokenRepository;
@@ -37,6 +90,8 @@ public class AuthService
 
     public async Task RequestOtpAsync(string phone, CancellationToken ct)
     {
+        phone = NormalizePhone(phone);
+        if (IsReviewLogin(phone)) return;
         var code = RandomNumberGenerator.GetInt32(1000, 10000).ToString();
         var otp = new OtpCode
         {
@@ -50,19 +105,8 @@ public class AuthService
 
     public async Task<TokenPairResponse> ConfirmOtpAsync(string phone, string code, CancellationToken ct)
     {
-        var otp = await _otpRepository.GetActiveByPhoneAsync(phone, ct)
-            ?? throw new InvalidOperationException("Код не найден или истёк. Запросите новый.");
-
-        if (otp.Attempts >= MaxOtpAttempts)
-            throw new InvalidOperationException("Превышено число попыток. Запросите новый код.");
-
-        if (otp.CodeHash != _tokenService.HashToken(code))
-        {
-            await _otpRepository.IncrementAttemptsAsync(otp.Id, ct);
-            throw new InvalidOperationException("Неверный код.");
-        }
-
-        await _otpRepository.MarkUsedAsync(otp.Id, ct);
+        phone = NormalizePhone(phone);
+        await VerifyOtpAsync(phone, code, ct);
 
         var user = await _userRepository.GetByPhoneAsync(phone, ct);
         if (user is null)
@@ -71,6 +115,54 @@ public class AuthService
             user.Id = await _userRepository.CreateAsync(user, ct);
         }
 
+        return await IssueAndPersistTokensAsync(user, ct);
+    }
+
+    /// <summary>Вход по номеру и паролю.</summary>
+    public async Task<TokenPairResponse> LoginWithPasswordAsync(string phone, string password, CancellationToken ct)
+    {
+        phone = NormalizePhone(phone);
+        var user = await _userRepository.GetByPhoneAsync(phone, ct);
+        var hash = user is null ? null : await _userRepository.GetPasswordHashAsync(user.Id, ct);
+        if (user is null || !PasswordHasher.Verify(password ?? string.Empty, hash))
+            throw new UnauthorizedAccessException("Неверный номер или пароль.");
+
+        return await IssueAndPersistTokensAsync(user, ct);
+    }
+
+    /// <summary>Регистрация: подтверждение номера кодом из SMS и установка пароля.</summary>
+    public async Task<TokenPairResponse> RegisterAsync(string phone, string code, string password, CancellationToken ct)
+    {
+        phone = NormalizePhone(phone);
+        ValidatePassword(password);
+
+        var user = await _userRepository.GetByPhoneAsync(phone, ct);
+        if (user is not null && await _userRepository.GetPasswordHashAsync(user.Id, ct) is not null)
+            throw new InvalidOperationException("Аккаунт с этим номером уже есть. Войдите или восстановите пароль.");
+
+        await VerifyOtpAsync(phone, code, ct);
+
+        if (user is null)
+        {
+            user = new User { Phone = phone };
+            user.Id = await _userRepository.CreateAsync(user, ct);
+        }
+
+        await _userRepository.SetPasswordHashAsync(user.Id, PasswordHasher.Hash(password), ct);
+        return await IssueAndPersistTokensAsync(user, ct);
+    }
+
+    /// <summary>Сброс пароля по коду из SMS.</summary>
+    public async Task<TokenPairResponse> ResetPasswordAsync(string phone, string code, string password, CancellationToken ct)
+    {
+        phone = NormalizePhone(phone);
+        ValidatePassword(password);
+
+        var user = await _userRepository.GetByPhoneAsync(phone, ct)
+            ?? throw new InvalidOperationException("Аккаунт с этим номером не найден. Зарегистрируйтесь.");
+
+        await VerifyOtpAsync(phone, code, ct);
+        await _userRepository.SetPasswordHashAsync(user.Id, PasswordHasher.Hash(password), ct);
         return await IssueAndPersistTokensAsync(user, ct);
     }
 
