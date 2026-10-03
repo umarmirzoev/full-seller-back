@@ -130,23 +130,18 @@ public class AuthService
         return await IssueAndPersistTokensAsync(user, ct);
     }
 
-    /// <summary>Регистрация: подтверждение номера кодом из SMS и установка пароля.</summary>
-    public async Task<TokenPairResponse> RegisterAsync(string phone, string code, string password, CancellationToken ct)
+    /// <summary>Регистрация по номеру телефона и паролю (без SMS-кода).</summary>
+    public async Task<TokenPairResponse> RegisterAsync(string phone, string password, CancellationToken ct)
     {
         phone = NormalizePhone(phone);
         ValidatePassword(password);
 
         var user = await _userRepository.GetByPhoneAsync(phone, ct);
-        if (user is not null && await _userRepository.GetPasswordHashAsync(user.Id, ct) is not null)
-            throw new InvalidOperationException("Аккаунт с этим номером уже есть. Войдите или восстановите пароль.");
+        if (user is not null)
+            throw new InvalidOperationException("Аккаунт с этим номером уже есть. Войдите по паролю.");
 
-        await VerifyOtpAsync(phone, code, ct);
-
-        if (user is null)
-        {
-            user = new User { Phone = phone };
-            user.Id = await _userRepository.CreateAsync(user, ct);
-        }
+        user = new User { Phone = phone };
+        user.Id = await _userRepository.CreateAsync(user, ct);
 
         await _userRepository.SetPasswordHashAsync(user.Id, PasswordHasher.Hash(password), ct);
         return await IssueAndPersistTokensAsync(user, ct);

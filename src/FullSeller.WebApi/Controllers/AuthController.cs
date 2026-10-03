@@ -34,10 +34,10 @@ public class AuthController : ControllerBase
     public async Task<ActionResult<TokenPairResponse>> Login([FromBody] PasswordLoginRequest dto, CancellationToken ct)
         => Ok(await _authService.LoginWithPasswordAsync(dto.Phone, dto.Password, ct));
 
-    /// <summary>Регистрация: код из SMS (см. otp/request) + пароль.</summary>
+    /// <summary>Регистрация по номеру телефона и паролю.</summary>
     [HttpPost("register")]
     public async Task<ActionResult<TokenPairResponse>> Register([FromBody] RegisterRequest dto, CancellationToken ct)
-        => Ok(await _authService.RegisterAsync(dto.Phone, dto.Code, dto.Password, ct));
+        => Ok(await _authService.RegisterAsync(dto.Phone, dto.Password, ct));
 
     /// <summary>Сброс пароля по коду из SMS.</summary>
     [HttpPost("password/reset")]
