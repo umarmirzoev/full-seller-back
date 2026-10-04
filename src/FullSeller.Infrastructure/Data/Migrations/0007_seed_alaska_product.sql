@@ -24,3 +24,7 @@ WHERE NOT EXISTS (SELECT 1 FROM PriceTiers WHERE ProductId = '45e61de4-6872-5a88
 INSERT INTO ProductVariants (Id, ProductId, Size, Color, Sku, StockQuantity)
 SELECT '8b7b8cf2-5303-5dc3-bea3-973329aa86f5'::uuid, '45e61de4-6872-5a88-bfac-f4e5c9910ec2'::uuid, '41-43', NULL, 'WEB-ALASKA1-V1', 500
 WHERE NOT EXISTS (SELECT 1 FROM ProductVariants WHERE Sku = 'WEB-ALASKA1-V1');
+
+-- На сайте «Fila Retro (Черные)» из статического списка не показывается (перекрыт записью Firestore с тем же id),
+-- поэтому прячем его и в приложении, чтобы каталог совпадал с сайтом (33 товара + «РЕКЛАМА» без цены).
+UPDATE Products SET IsActive = FALSE WHERE Name = 'Fila Retro (Черные)';
