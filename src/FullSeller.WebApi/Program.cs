@@ -104,9 +104,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles(); // wwwroot/uploads — файлы, загруженные через IFileStorage
-
-app.UseCors("FullSellerClients");
+app.UseCors("FullSellerClients"); // до StaticFiles, чтобы фото отдавались с CORS-заголовками (Flutter web)
+app.UseStaticFiles(); // wwwroot/media — фото товаров; wwwroot/uploads — файлы из IFileStorage
 
 app.UseAuthentication();
 app.UseAuthorization();
