@@ -107,6 +107,17 @@ app.UseHttpsRedirection();
 app.UseCors("FullSellerClients"); // до StaticFiles, чтобы фото отдавались с CORS-заголовками (Flutter web)
 app.UseStaticFiles(); // wwwroot/media — фото товаров; wwwroot/uploads — файлы из IFileStorage
 
+// Фото товаров также доступны по /api/media/... — этот префикс уже проксируется nginx на бэкенд.
+var mediaDir = Path.Combine(app.Environment.ContentRootPath, "wwwroot", "media");
+if (Directory.Exists(mediaDir))
+{
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(mediaDir),
+        RequestPath = "/api/media"
+    });
+}
+
 app.UseAuthentication();
 app.UseAuthorization();
 
