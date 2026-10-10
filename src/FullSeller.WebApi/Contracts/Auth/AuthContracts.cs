@@ -8,4 +8,6 @@ public record PasswordLoginRequest(string Phone, string Password);
 public record RegisterRequest(string Phone, string Password);
 public record ResetPasswordRequest(string Phone, string Code, string Password);
 
+public record ForgotTelegramResponse(string Url, string Bot);
+
 public record TokenPairResponse(string AccessToken, string RefreshToken, DateTime AccessTokenExpiresAt);

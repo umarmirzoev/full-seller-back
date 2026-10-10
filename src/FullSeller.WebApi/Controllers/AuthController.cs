@@ -9,10 +9,35 @@ namespace FullSeller.WebApi.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly AuthService _authService;
+    private readonly PasswordResetTelegramStore _resetStore;
+    private readonly IConfiguration _config;
 
-    public AuthController(AuthService authService)
+    public AuthController(AuthService authService, PasswordResetTelegramStore resetStore, IConfiguration config)
     {
         _authService = authService;
+        _resetStore = resetStore;
+        _config = config;
+    }
+
+    /// <summary>
+    /// Забыли пароль → код через Telegram (бесплатно, вместо SMS).
+    /// Возвращает ссылку t.me/&lt;bot&gt;?start=reset_&lt;nonce&gt;; бот попросит подтвердить номер и пришлёт код,
+    /// который затем передаётся в POST /api/auth/password/reset.
+    /// </summary>
+    [HttpPost("password/forgot-telegram")]
+    public async Task<ActionResult<ForgotTelegramResponse>> ForgotPasswordTelegram([FromBody] OtpRequestDto dto, CancellationToken ct)
+    {
+        if (string.IsNullOrWhiteSpace(_config["Telegram:AuthBotToken"]))
+            return StatusCode(503, new { message = "Восстановление через Telegram временно недоступно." });
+
+        var phone = await _authService.EnsureAccountExistsAsync(dto.Phone, ct);
+        var bot = _config["Telegram:AuthBotUsername"];
+        if (string.IsNullOrWhiteSpace(bot)) bot = _resetStore.DetectedUsername;
+        if (string.IsNullOrWhiteSpace(bot))
+            return StatusCode(503, new { message = "Бот ещё запускается. Попробуйте через минуту." });
+
+        var nonce = _resetStore.CreateNonce(phone);
+        return Ok(new ForgotTelegramResponse($"https://t.me/{bot.TrimStart('@')}?start=reset_{nonce}", bot.TrimStart('@')));
     }
 
     [HttpPost("otp/request")]

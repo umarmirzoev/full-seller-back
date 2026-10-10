@@ -40,6 +40,12 @@ builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<OrderService>();
 builder.Services.AddScoped<PartnerService>();
 
+// Восстановление пароля через Telegram-бота (бесплатно вместо SMS).
+builder.Services.AddMemoryCache();
+builder.Services.AddHttpClient("telegram");
+builder.Services.AddSingleton<PasswordResetTelegramStore>();
+builder.Services.AddHostedService<TelegramResetBotService>();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("FullSellerClients", policy =>

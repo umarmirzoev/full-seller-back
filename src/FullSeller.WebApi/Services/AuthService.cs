@@ -147,6 +147,15 @@ public class AuthService
         return await IssueAndPersistTokensAsync(user, ct);
     }
 
+    /// <summary>Проверяет, что аккаунт с таким номером существует; возвращает нормализованный номер.</summary>
+    public async Task<string> EnsureAccountExistsAsync(string phone, CancellationToken ct)
+    {
+        phone = NormalizePhone(phone);
+        _ = await _userRepository.GetByPhoneAsync(phone, ct)
+            ?? throw new InvalidOperationException("Аккаунт с этим номером не найден. Зарегистрируйтесь.");
+        return phone;
+    }
+
     /// <summary>Сброс пароля по коду из SMS.</summary>
     public async Task<TokenPairResponse> ResetPasswordAsync(string phone, string code, string password, CancellationToken ct)
     {
