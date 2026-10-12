@@ -124,17 +124,13 @@ if (Directory.Exists(mediaDir))
     });
 }
 
-// Админ-панель (статическая страница) — https://api.full-seller.com/api/panel/ ; префикс /api уже проксируется nginx.
-var adminDir = Path.Combine(app.Environment.ContentRootPath, "wwwroot", "admin");
-if (Directory.Exists(adminDir))
+// Админ-панель (одна статическая страница) — https://api.full-seller.com/api/panel/ ; префикс /api уже проксируется nginx.
+// Отдаём файл обычным endpoint-ом (без UseFileServer/редиректов): маршрут совпадает и с /api/panel, и с /api/panel/.
+var adminIndex = Path.Combine(app.Environment.ContentRootPath, "wwwroot", "admin", "index.html");
+if (File.Exists(adminIndex))
 {
-    app.MapGet("/api/panel", () => Results.Redirect("/api/panel/"));
-    app.UseFileServer(new FileServerOptions
-    {
-        FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(adminDir),
-        RequestPath = "/api/panel",
-        EnableDefaultFiles = true
-    });
+    app.MapGet("/api/panel", async () =>
+        Results.Content(await File.ReadAllTextAsync(adminIndex), "text/html; charset=utf-8"));
 }
 
 app.UseAuthentication();
