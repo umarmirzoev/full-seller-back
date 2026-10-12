@@ -133,6 +133,16 @@ if (File.Exists(adminIndex))
         Results.Content(await File.ReadAllTextAsync(adminIndex), "text/html; charset=utf-8"));
 }
 
+// Юридические страницы для Google Play: политика конфиденциальности и удаление аккаунта (публичные, без авторизации).
+foreach (var (route, file) in new[] { ("/api/privacy", "privacy.html"), ("/api/account-deletion", "account-deletion.html") })
+{
+    var legalPath = Path.Combine(app.Environment.ContentRootPath, "wwwroot", "legal", file);
+    if (File.Exists(legalPath))
+    {
+        app.MapGet(route, async () => Results.Content(await File.ReadAllTextAsync(legalPath), "text/html; charset=utf-8"));
+    }
+}
+
 app.UseAuthentication();
 app.UseAuthorization();
 
