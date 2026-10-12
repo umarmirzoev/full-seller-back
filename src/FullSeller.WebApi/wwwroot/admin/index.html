@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex,nofollow">
 <title>FULL SELLER — Админ-панель</title>
 <style>
-:root{--side:#10243d;--side2:#17314f;--side-t:#c5d1e0;--bg:#f3f6f4;--card:#fff;--text:#16202b;--muted:#7b8794;--line:#e6ebe8;--g:#4caf50;--g-d:#3b9140;--g-l:#e6f4e7;--bad:#e5484d;--bad-l:#fdecec;--warn:#f5a524;--warn-l:#fff4de;--blue:#3b82f6;--blue-l:#e8f0fe;--vio:#8b5cf6;--r:14px;--sh:0 1px 2px rgba(16,36,61,.05)}
+:root{--side:#2b1708;--side2:#3f2411;--side-t:#ecdcc8;--bg:#fffbf8;--card:#fff;--text:#1a1410;--muted:#9c8f80;--line:#f2e1ce;--g:#ff6a00;--g-d:#e85d00;--g-l:#fff4ea;--ok:#16a34a;--ok-l:#e7f6ec;--bad:#dc2626;--bad-l:#fdecec;--warn:#ffb020;--warn-l:#fff4de;--blue:#2563eb;--blue-l:#e8f0fe;--vio:#8b5cf6;--r:14px;--sh:0 2px 8px rgba(74,29,2,.06)}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 button,input,select,textarea{font:inherit;color:inherit}
@@ -19,11 +19,11 @@ svg.i{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stro
 #appView{display:flex;min-height:100vh}
 aside{width:250px;background:var(--side);color:var(--side-t);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;flex:none;transition:width .15s;z-index:30}
 aside .brand{display:flex;align-items:center;gap:10px;padding:18px 18px 10px;color:#fff;font-weight:800;font-size:18px;letter-spacing:.3px}
-aside .brand .lg{width:30px;height:30px;border-radius:9px;background:var(--g);display:grid;place-items:center;color:#fff;font-size:15px}
+aside .brand .lg{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,#ffb15c,#ff6a00 55%,#ff3d00);display:grid;place-items:center;color:#fff;font-size:15px}
 aside nav{flex:1;overflow:auto;padding:8px 10px}
 .ni{display:flex;align-items:center;gap:12px;width:100%;padding:11px 12px;border-radius:10px;background:none;border:0;color:var(--side-t);cursor:pointer;text-align:left;font-weight:600;font-size:14.5px;margin-bottom:2px}
 .ni:hover{background:var(--side2)}
-.ni.on{background:var(--g);color:#fff}
+.ni.on{background:linear-gradient(135deg,#ff8a3d,#ff6a00);color:#fff;box-shadow:0 4px 12px rgba(255,106,0,.35)}
 .ni .tx{flex:1;white-space:nowrap}
 .ni .bd{background:var(--bad);color:#fff;border-radius:999px;min-width:20px;height:20px;padding:0 6px;font-size:11px;font-weight:700;display:grid;place-items:center}
 .ni .ch{transition:transform .15s;opacity:.7}
@@ -41,10 +41,10 @@ body.collapsed .ni{justify-content:center}
 header.top{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:12px 22px}
 header.top h1{margin:0;font-size:20px;white-space:nowrap}
 .search{flex:1;max-width:620px;margin:0 auto 0 8px;position:relative}
-.search input{width:100%;padding:10px 14px 10px 38px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+.search input{width:100%;padding:10px 14px 10px 38px;border:1px solid var(--line);border-radius:10px;background:#fff7f0}
 .search svg{position:absolute;left:11px;top:10px;color:var(--muted);width:18px;height:18px}
 .ib{position:relative;background:none;border:0;cursor:pointer;color:var(--text);padding:7px;border-radius:9px}
-.ib:hover{background:var(--bg)}
+.ib:hover{background:#fff4ea}
 .ib .bd{position:absolute;top:0;right:0;background:var(--bad);color:#fff;border-radius:999px;min-width:17px;height:17px;font-size:10px;font-weight:700;display:grid;place-items:center;padding:0 4px}
 .me{display:flex;align-items:center;gap:10px}
 .av{width:38px;height:38px;border-radius:50%;background:var(--g-l);color:var(--g-d);display:grid;place-items:center;font-weight:800}
@@ -71,7 +71,7 @@ main{padding:20px 22px 40px;max-width:1500px;width:100%}
 .stat .n{font-size:28px;font-weight:800;line-height:1.1}
 .stat .s{font-size:12.5px;font-weight:600}
 .t-g{background:var(--g-l);color:var(--g-d)}.t-b{background:var(--blue-l);color:var(--blue)}.t-w{background:var(--warn-l);color:#b97c00}.t-r{background:var(--bad-l);color:var(--bad)}.t-v{background:#efe9fe;color:var(--vio)}
-.s-g{color:var(--g-d)}.s-b{color:var(--blue)}.s-w{color:#b97c00}.s-r{color:var(--bad)}
+.s-g{color:var(--g-d)}.s-o{color:var(--ok)}.s-b{color:var(--blue)}.s-w{color:#b97c00}.s-r{color:var(--bad)}
 .rev .cols{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .rev .cols .l{color:var(--muted);font-size:12.5px}.rev .cols .n{font-size:22px;font-weight:800}.rev .cols .s{font-size:12px;font-weight:600;color:var(--g-d)}
 select.mini,.bar select,.bar input{padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
@@ -88,25 +88,25 @@ select.mini,.bar select,.bar input{padding:8px 12px;border:1px solid var(--line)
 .list .it .m span{color:var(--muted);font-size:12.5px}
 .bubble{width:38px;height:38px;border-radius:50%;background:var(--g-l);color:var(--g-d);display:grid;place-items:center;font-weight:800;flex:none}
 .pill{display:inline-block;padding:3px 11px;border-radius:999px;font-size:12px;font-weight:700}
-.p0{background:var(--blue-l);color:var(--blue)}.p1{background:var(--warn-l);color:#b97c00}.p2{background:#efe9fe;color:var(--vio)}.p3{background:var(--g-l);color:var(--g-d)}.p4{background:var(--bad-l);color:var(--bad)}.poff{background:#eceff1;color:#607080}
+.p0{background:var(--blue-l);color:var(--blue)}.p1{background:var(--warn-l);color:#b97c00}.p2{background:#efe9fe;color:var(--vio)}.p3{background:var(--ok-l);color:var(--ok)}.p4{background:var(--bad-l);color:var(--bad)}.poff{background:#eceff1;color:#607080}
 .hbar{display:flex;align-items:center;gap:10px;margin:9px 0}
-.hbar .nm{width:110px;font-size:13px}.hbar .tr{flex:1;background:var(--bg);border-radius:99px;height:10px;overflow:hidden}.hbar .tr i{display:block;height:100%;border-radius:99px}.hbar .v{width:64px;text-align:right;font-weight:700}
+.hbar .nm{width:110px;font-size:13px}.hbar .tr{flex:1;background:#fff0e2;border-radius:99px;height:10px;overflow:hidden}.hbar .tr i{display:block;height:100%;border-radius:99px}.hbar .v{width:64px;text-align:right;font-weight:700}
 /* таблицы/формы */
 .bar{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px;align-items:center}
 .bar input[type=search]{flex:1;min-width:180px}
-.btn{background:var(--g);color:#fff;border:0;border-radius:10px;padding:9px 16px;cursor:pointer;font-weight:700}
-.btn:hover{background:var(--g-d)}
+.btn{background:linear-gradient(135deg,#ff8a3d,#ff6a00);color:#fff;border:0;border-radius:10px;padding:9px 16px;cursor:pointer;font-weight:700}
+.btn:hover{background:var(--g-d)}.btn.ghost,.btn.ghost:hover{background-image:none}
 .btn.ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
-.btn.ghost:hover{background:var(--bg)}
-.btn.bad{background:var(--bad)}
+.btn.ghost:hover{background:#fff4ea}
+.btn.bad{background:var(--bad);background-image:none}
 .btn.sm{padding:5px 10px;font-size:13px}
 .btn:disabled{opacity:.5;cursor:default}
 .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--card);box-shadow:var(--sh)}
 table{width:100%;border-collapse:collapse;min-width:620px}
 th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle}
-th{font-size:12px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);background:#fafcfb}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);background:#fff7f0}
 tr:last-child td{border-bottom:0}
-tr.click{cursor:pointer}tr.click:hover td{background:#fafcfb}
+tr.click{cursor:pointer}tr.click:hover td{background:#fff7f0}
 .pager{display:flex;gap:8px;align-items:center;justify-content:center;margin:14px 0;color:var(--muted)}
 img.th{width:44px;height:44px;border-radius:9px;object-fit:cover;background:var(--bg);display:block}
 .muted{color:var(--muted)}.err{color:var(--bad);margin:8px 0}
@@ -126,7 +126,7 @@ img.th{width:44px;height:44px;border-radius:9px;object-fit:cover;background:var(
 .line.t{grid-template-columns:1fr 1fr auto}
 .line input{padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card);min-width:0}
 .tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
-.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#16202b;color:#fff;padding:10px 18px;border-radius:999px;z-index:90;font-weight:600}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#2b1708;color:#fff;padding:10px 18px;border-radius:999px;z-index:90;font-weight:600}
 .stars{color:var(--warn);letter-spacing:1px}
 @media (max-width:1180px){.top4{grid-template-columns:repeat(2,1fr)}.top4>.rev{grid-column:1/-1}.c3{grid-template-columns:1fr 1fr}.c4b{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:860px){
@@ -319,13 +319,13 @@ function lineChart(pts,color,fmt){
   function X(i){return L+(n<2?iw/2:i*iw/(n-1))}
   function Y(v){return T+ih-(v/top)*ih}
   var s='<svg class="chart" viewBox="0 0 '+W+' '+H+'">';
-  for(var g=0;g<=4;g++){var gv=top*g/4,gy=Y(gv);s+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+gy+'" y2="'+gy+'" stroke="#e6ebe8"/><text x="'+(L-6)+'" y="'+(gy+4)+'" text-anchor="end">'+esc(compact(gv))+'</text>'}
+  for(var g=0;g<=4;g++){var gv=top*g/4,gy=Y(gv);s+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+gy+'" y2="'+gy+'" stroke="#f2e1ce"/><text x="'+(L-6)+'" y="'+(gy+4)+'" text-anchor="end">'+esc(compact(gv))+'</text>'}
   var d='';pts.forEach(function(p,i){d+=(i?'L':'M')+X(i).toFixed(1)+' '+Y(p.v).toFixed(1)});
   s+='<path d="'+d+'L'+X(n-1).toFixed(1)+' '+Y(0)+'L'+X(0).toFixed(1)+' '+Y(0)+'Z" fill="'+color+'" opacity=".12"/><path d="'+d+'" fill="none" stroke="'+color+'" stroke-width="2.4" stroke-linejoin="round"/>';
   var step=Math.ceil(n/5),rad=n>20?2:3;
   pts.forEach(function(p,i){
     s+='<circle cx="'+X(i).toFixed(1)+'" cy="'+Y(p.v).toFixed(1)+'" r="'+rad+'" fill="#fff" stroke="'+color+'" stroke-width="2"><title>'+esc(p.l)+': '+esc(fmt?fmt(p.v):num(p.v))+'</title></circle>';
-    if(i%step===0&&i<=n-1-Math.max(1,Math.floor(step/2)))s+='<text x="'+X(i).toFixed(1)+'" y="'+(H-7)+'" text-anchor="middle">'+esc(p.l)+'</text>';
+    if(i%step===0&&i<=n-1-Math.ceil(step*0.8))s+='<text x="'+X(i).toFixed(1)+'" y="'+(H-7)+'" text-anchor="middle">'+esc(p.l)+'</text>';
   });
   s+='<text x="'+X(n-1).toFixed(1)+'" y="'+(H-7)+'" text-anchor="end">'+esc(pts[n-1].l)+'</text>';
   return s+'</svg>';
@@ -433,8 +433,8 @@ async function viewDash(){
       '<div><div class="l">Средний чек</div><div class="n">'+esc(num(avg))+'</div><div class="s">'+CUR+'</div></div></div></div>'+
     '</div>'+
     '<div class="row c4b">'+
-      '<div class="card"><h3>Заказы по дням</h3>'+lineChart(daySeries(orders,days,'createdAt',function(){return 1}),'#4caf50',function(v){return String(Math.round(v))})+'</div>'+
-      '<div class="card"><h3>Выручка по дням</h3>'+lineChart(daySeries(orders.filter(isLive),days,'createdAt',function(o){return o.totalAmount}),'#3b82f6',function(v){return num(Math.round(v))})+'</div>'+
+      '<div class="card"><h3>Заказы по дням</h3>'+lineChart(daySeries(orders,days,'createdAt',function(){return 1}),'#ff6a00',function(v){return String(Math.round(v))})+'</div>'+
+      '<div class="card"><h3>Выручка по дням</h3>'+lineChart(daySeries(orders.filter(isLive),days,'createdAt',function(o){return o.totalAmount}),'#2563eb',function(v){return num(Math.round(v))})+'</div>'+
       '<div class="card"><h3>Новые клиенты по дням</h3>'+lineChart(daySeries(users,days,'createdAt',function(){return 1}),'#8b5cf6',function(v){return String(Math.round(v))})+'</div>'+
       '<div class="card"><h3>Заказы по статусам</h3>'+statusBars(by)+'</div>'+
     '</div>'+
@@ -457,7 +457,7 @@ async function viewDash(){
 }
 function bindGo(root){root.querySelectorAll('[data-g]').forEach(function(a){a.onclick=function(){location.hash='#/'+a.dataset.g}})}
 function statusBars(by){
-  var total=0;for(var i=0;i<5;i++)total+=by[i]||0;var cols=['#3b82f6','#f5a524','#8b5cf6','#4caf50','#e5484d'];
+  var total=0;for(var i=0;i<5;i++)total+=by[i]||0;var cols=['#2563eb','#ffb020','#8b5cf6','#16a34a','#dc2626'];
   return ORDER_ST.map(function(s,i){var v=by[i]||0;var w=total?Math.round(v/total*100):0;return '<div class="hbar"><div class="nm">'+s+'</div><div class="tr"><i style="width:'+w+'%;background:'+cols[i]+'"></i></div><div class="v">'+v+'</div></div>'}).join('')+(total?'':'<p class="muted">Заказов пока нет</p>');
 }
 
@@ -573,7 +573,7 @@ async function viewFinance(){
   var keys=Object.keys(months).sort().reverse();
   var rows=keys.map(function(k){var m=months[k];var p=k.split('-');return '<tr><td><b>'+p[1]+'.'+p[0]+'</b></td><td>'+m.n+'</td><td>'+esc(money(m.rev))+'</td><td>'+esc(money(m.dl))+'</td><td>'+esc(money(m.c))+'</td></tr>'}).join('');
   $('#main').innerHTML='<div class="row c4">'+statCard('g','wallet','Выручка (без отмен)',money(live),orders.filter(isLive).length+' заказов','g')+statCard('b','ok','Получено (доставлено)',money(done),'','b')+statCard('w','clock','В процессе',money(prog),'ещё не доставлено','w')+statCard('r','x','Отменено',money(canc),'','r')+'</div>'+
-   '<div class="row c22"><div class="card"><h3>Выручка по дням (30 дней)</h3>'+lineChart(daySeries(orders.filter(isLive),lastDays(30),'createdAt',function(o){return o.totalAmount}),'#3b82f6',function(v){return num(Math.round(v))})+'</div>'+
+   '<div class="row c22"><div class="card"><h3>Выручка по дням (30 дней)</h3>'+lineChart(daySeries(orders.filter(isLive),lastDays(30),'createdAt',function(o){return o.totalAmount}),'#2563eb',function(v){return num(Math.round(v))})+'</div>'+
    '<div class="card"><h3>Итоги</h3><div class="hbar"><div class="nm" style="width:150px">Доставка (сумма)</div><div class="v" style="flex:1;text-align:right">'+esc(money(dlv))+'</div></div><div class="hbar"><div class="nm" style="width:150px">Средний чек</div><div class="v" style="flex:1;text-align:right">'+esc(money(orders.filter(isLive).length?live/orders.filter(isLive).length:0))+'</div></div><div class="hbar"><div class="nm" style="width:150px">Заказов всего</div><div class="v" style="flex:1;text-align:right">'+orders.length+'</div></div></div></div>'+
    '<h3>По месяцам</h3><div class="tablewrap"><table><thead><tr><th>Месяц</th><th>Заказов</th><th>Выручка</th><th>Доставка</th><th>Отменено</th></tr></thead><tbody>'+(rows||'<tr><td colspan="5" class="muted">Данных нет</td></tr>')+'</tbody></table></div>';
 }
@@ -587,7 +587,7 @@ async function viewAnalytics(){
   var top=Object.keys(spend).map(function(k){return spend[k]}).sort(function(a,b){return b.sum-a.sum}).slice(0,10);
   var days=lastDays(n),fmtI=function(v){return String(Math.round(v))};
   $('#main').innerHTML='<div class="bar"><span class="muted">Период:</span><select class="mini" id="anD"><option value="7"'+(n===7?' selected':'')+'>7 дней</option><option value="30"'+(n===30?' selected':'')+'>30 дней</option><option value="90"'+(n===90?' selected':'')+'>90 дней</option></select></div>'+
-   '<div class="row c22"><div class="card"><h3>Заказы по дням</h3>'+lineChart(daySeries(orders,days,'createdAt',function(){return 1}),'#4caf50',fmtI)+'</div><div class="card"><h3>Выручка по дням</h3>'+lineChart(daySeries(orders.filter(isLive),days,'createdAt',function(o){return o.totalAmount}),'#3b82f6',function(v){return num(Math.round(v))})+'</div></div>'+
+   '<div class="row c22"><div class="card"><h3>Заказы по дням</h3>'+lineChart(daySeries(orders,days,'createdAt',function(){return 1}),'#ff6a00',fmtI)+'</div><div class="card"><h3>Выручка по дням</h3>'+lineChart(daySeries(orders.filter(isLive),days,'createdAt',function(o){return o.totalAmount}),'#2563eb',function(v){return num(Math.round(v))})+'</div></div>'+
    '<div class="row c22"><div class="card"><h3>Новые клиенты по дням</h3>'+lineChart(daySeries(users,days,'createdAt',function(){return 1}),'#8b5cf6',fmtI)+'</div><div class="card"><h3>Заказы по статусам</h3>'+statusBars(by)+'</div></div>'+
    '<h3>Топ клиентов по сумме заказов</h3><div class="tablewrap"><table><thead><tr><th>#</th><th>Клиент</th><th>Телефон</th><th>Заказов</th><th>Сумма</th></tr></thead><tbody>'+(top.map(function(t,i){return '<tr><td>'+(i+1)+'</td><td>'+esc(t.name||'—')+'</td><td>'+esc(t.phone)+'</td><td>'+t.n+'</td><td><b>'+esc(money(t.sum))+'</b></td></tr>'}).join('')||'<tr><td colspan="5" class="muted">Данных нет</td></tr>')+'</tbody></table></div>';
   $('#anD').onchange=function(){state.anDays=+this.value;navigate()};
