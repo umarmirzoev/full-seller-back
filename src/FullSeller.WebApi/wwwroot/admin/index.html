@@ -6,65 +6,139 @@
 <meta name="robots" content="noindex,nofollow">
 <title>FULL SELLER — Админ-панель</title>
 <style>
-:root{--bg:#f6f4f1;--card:#fff;--text:#1f1b16;--muted:#7a7268;--line:#e8e2da;--brand:#ee6a00;--brand-d:#c95700;--ok:#16794c;--bad:#c0392b;--r:12px}
-@media (prefers-color-scheme:dark){:root{--bg:#161412;--card:#201d1a;--text:#f2ede6;--muted:#a39a8e;--line:#34302b;--brand:#ff8a2b;--brand-d:#ffa456;--ok:#4cc38a;--bad:#ff7b6b}}
+:root{--side:#10243d;--side2:#17314f;--side-t:#c5d1e0;--bg:#f3f6f4;--card:#fff;--text:#16202b;--muted:#7b8794;--line:#e6ebe8;--g:#4caf50;--g-d:#3b9140;--g-l:#e6f4e7;--bad:#e5484d;--bad-l:#fdecec;--warn:#f5a524;--warn-l:#fff4de;--blue:#3b82f6;--blue-l:#e8f0fe;--vio:#8b5cf6;--r:14px;--sh:0 1px 2px rgba(16,36,61,.05)}
 *{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 button,input,select,textarea{font:inherit;color:inherit}
 .hidden{display:none!important}
-header.top{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:10px 16px;flex-wrap:wrap}
-.logo{font-weight:800;letter-spacing:.3px;color:var(--brand)}
-nav{display:flex;gap:4px;flex-wrap:wrap;flex:1}
-nav button{background:none;border:0;padding:8px 14px;border-radius:999px;cursor:pointer;color:var(--muted);font-weight:600}
-nav button.on{background:var(--brand);color:#fff}
-.who{color:var(--muted);font-size:13px}
-main{max-width:1180px;margin:0 auto;padding:16px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px}
-.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
-.stat .n{font-size:26px;font-weight:800}
+svg.i{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+/* вход */
+.login{max-width:380px;margin:12vh auto;padding:0 16px}
+.login h1{margin:0 0 4px;color:var(--g-d)}
+/* каркас */
+#appView{display:flex;min-height:100vh}
+aside{width:250px;background:var(--side);color:var(--side-t);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;flex:none;transition:width .15s;z-index:30}
+aside .brand{display:flex;align-items:center;gap:10px;padding:18px 18px 10px;color:#fff;font-weight:800;font-size:18px;letter-spacing:.3px}
+aside .brand .lg{width:30px;height:30px;border-radius:9px;background:var(--g);display:grid;place-items:center;color:#fff;font-size:15px}
+aside nav{flex:1;overflow:auto;padding:8px 10px}
+.ni{display:flex;align-items:center;gap:12px;width:100%;padding:11px 12px;border-radius:10px;background:none;border:0;color:var(--side-t);cursor:pointer;text-align:left;font-weight:600;font-size:14.5px;margin-bottom:2px}
+.ni:hover{background:var(--side2)}
+.ni.on{background:var(--g);color:#fff}
+.ni .tx{flex:1;white-space:nowrap}
+.ni .bd{background:var(--bad);color:#fff;border-radius:999px;min-width:20px;height:20px;padding:0 6px;font-size:11px;font-weight:700;display:grid;place-items:center}
+.ni .ch{transition:transform .15s;opacity:.7}
+.ni.open .ch{transform:rotate(90deg)}
+.sub{display:none;padding:2px 0 6px 0}
+.sub.open{display:block}
+.sub button{display:block;width:100%;text-align:left;background:none;border:0;color:var(--side-t);padding:8px 12px 8px 44px;border-radius:8px;cursor:pointer;font-size:14px}
+.sub button:hover{background:var(--side2)}
+.sub button.on{color:#fff;font-weight:700}
+aside .foot{padding:10px;border-top:1px solid var(--side2)}
+body.collapsed aside{width:68px}
+body.collapsed aside .tx,body.collapsed aside .bd,body.collapsed aside .ch,body.collapsed aside .sub,body.collapsed aside .brand span.nm{display:none}
+body.collapsed .ni{justify-content:center}
+.wrap{flex:1;min-width:0;display:flex;flex-direction:column}
+header.top{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:12px 22px}
+header.top h1{margin:0;font-size:20px;white-space:nowrap}
+.search{flex:1;max-width:620px;margin:0 auto 0 8px;position:relative}
+.search input{width:100%;padding:10px 14px 10px 38px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+.search svg{position:absolute;left:11px;top:10px;color:var(--muted);width:18px;height:18px}
+.ib{position:relative;background:none;border:0;cursor:pointer;color:var(--text);padding:7px;border-radius:9px}
+.ib:hover{background:var(--bg)}
+.ib .bd{position:absolute;top:0;right:0;background:var(--bad);color:#fff;border-radius:999px;min-width:17px;height:17px;font-size:10px;font-weight:700;display:grid;place-items:center;padding:0 4px}
+.me{display:flex;align-items:center;gap:10px}
+.av{width:38px;height:38px;border-radius:50%;background:var(--g-l);color:var(--g-d);display:grid;place-items:center;font-weight:800}
+.me b{display:block;line-height:1.1}.me small{color:var(--muted)}
+.burger{display:none}
+main{padding:20px 22px 40px;max-width:1500px;width:100%}
+/* карточки */
+.card{background:var(--card);border-radius:var(--r);padding:18px;box-shadow:var(--sh);border:1px solid var(--line)}
+.card h3{margin:0 0 12px;font-size:16px}
+.card .hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:8px}
+.card .hd h3{margin:0}
+.card .hd a{color:var(--g-d);font-weight:700;cursor:pointer;font-size:13px}
+.row{display:grid;gap:14px;margin-bottom:14px}
+.c4{grid-template-columns:repeat(4,1fr)}
+.top4{grid-template-columns:repeat(4,1fr) 1.9fr}
+.c2{grid-template-columns:1fr 1fr}
+.c3{grid-template-columns:1.1fr 1fr 1fr}
+.c22{grid-template-columns:1fr 1fr}
+.c4b{grid-template-columns:repeat(4,1fr)}
+.stat{display:flex;gap:14px;align-items:center}
+.ico{width:48px;height:48px;border-radius:13px;display:grid;place-items:center;flex:none}
+.ico svg{width:24px;height:24px}
 .stat .l{color:var(--muted);font-size:13px}
+.stat .n{font-size:28px;font-weight:800;line-height:1.1}
+.stat .s{font-size:12.5px;font-weight:600}
+.t-g{background:var(--g-l);color:var(--g-d)}.t-b{background:var(--blue-l);color:var(--blue)}.t-w{background:var(--warn-l);color:#b97c00}.t-r{background:var(--bad-l);color:var(--bad)}.t-v{background:#efe9fe;color:var(--vio)}
+.s-g{color:var(--g-d)}.s-b{color:var(--blue)}.s-w{color:#b97c00}.s-r{color:var(--bad)}
+.rev .cols{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.rev .cols .l{color:var(--muted);font-size:12.5px}.rev .cols .n{font-size:22px;font-weight:800}.rev .cols .s{font-size:12px;font-weight:600;color:var(--g-d)}
+select.mini,.bar select,.bar input{padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+.chart{width:100%;height:auto;display:block}
+.chart text{fill:var(--muted);font-size:11px}
+.empty{color:var(--muted);text-align:center;padding:60px 0}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 10px}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:5px 14px;cursor:pointer;font-size:13px;font-weight:600;color:var(--muted)}
+.chip.on{border-color:var(--g);color:var(--g-d);background:var(--g-l)}
+.list .it{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.list .it:last-child{border-bottom:0}
+.list .it .m{flex:1;min-width:0}
+.list .it .m b,.list .it .m span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.list .it .m span{color:var(--muted);font-size:12.5px}
+.bubble{width:38px;height:38px;border-radius:50%;background:var(--g-l);color:var(--g-d);display:grid;place-items:center;font-weight:800;flex:none}
+.pill{display:inline-block;padding:3px 11px;border-radius:999px;font-size:12px;font-weight:700}
+.p0{background:var(--blue-l);color:var(--blue)}.p1{background:var(--warn-l);color:#b97c00}.p2{background:#efe9fe;color:var(--vio)}.p3{background:var(--g-l);color:var(--g-d)}.p4{background:var(--bad-l);color:var(--bad)}.poff{background:#eceff1;color:#607080}
+.hbar{display:flex;align-items:center;gap:10px;margin:9px 0}
+.hbar .nm{width:110px;font-size:13px}.hbar .tr{flex:1;background:var(--bg);border-radius:99px;height:10px;overflow:hidden}.hbar .tr i{display:block;height:100%;border-radius:99px}.hbar .v{width:64px;text-align:right;font-weight:700}
+/* таблицы/формы */
 .bar{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px;align-items:center}
-.bar input,.bar select{padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
 .bar input[type=search]{flex:1;min-width:180px}
-.btn{background:var(--brand);color:#fff;border:0;border-radius:10px;padding:9px 16px;cursor:pointer;font-weight:700}
-.btn:hover{background:var(--brand-d)}
+.btn{background:var(--g);color:#fff;border:0;border-radius:10px;padding:9px 16px;cursor:pointer;font-weight:700}
+.btn:hover{background:var(--g-d)}
 .btn.ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+.btn.ghost:hover{background:var(--bg)}
 .btn.bad{background:var(--bad)}
 .btn.sm{padding:5px 10px;font-size:13px}
 .btn:disabled{opacity:.5;cursor:default}
-.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--card)}
-table{width:100%;border-collapse:collapse;min-width:640px}
-th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle}
-th{font-size:12px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);background:var(--bg)}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--card);box-shadow:var(--sh)}
+table{width:100%;border-collapse:collapse;min-width:620px}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);background:#fafcfb}
 tr:last-child td{border-bottom:0}
-tr.click{cursor:pointer}tr.click:hover td{background:var(--bg)}
-.pill{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:700;background:var(--bg);border:1px solid var(--line)}
-.pill.s0{color:#2563eb}.pill.s1{color:#b7791f}.pill.s2{color:#7c3aed}.pill.s3{color:var(--ok)}.pill.s4{color:var(--bad)}
-.pill.off{color:var(--muted)}
+tr.click{cursor:pointer}tr.click:hover td{background:#fafcfb}
 .pager{display:flex;gap:8px;align-items:center;justify-content:center;margin:14px 0;color:var(--muted)}
-img.th{width:44px;height:44px;border-radius:8px;object-fit:cover;background:var(--bg);display:block}
-.muted{color:var(--muted)}
-.err{color:var(--bad);margin:8px 0}
-.login{max-width:360px;margin:12vh auto;padding:0 16px}
-.login h1{margin:0 0 4px;color:var(--brand)}
+img.th{width:44px;height:44px;border-radius:9px;object-fit:cover;background:var(--bg);display:block}
+.muted{color:var(--muted)}.err{color:var(--bad);margin:8px 0}
 .field{display:block;margin:10px 0}
 .field span{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
 .field input,.field select,.field textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
 .field textarea{min-height:72px;resize:vertical}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
-.chk{display:flex;gap:16px;margin:10px 0;flex-wrap:wrap}
-.chk label{display:flex;gap:6px;align-items:center}
-.modalbg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:20;display:flex;align-items:flex-start;justify-content:center;padding:4vh 12px;overflow:auto}
-.modal{background:var(--card);border-radius:var(--r);width:100%;max-width:720px;padding:18px;border:1px solid var(--line)}
+.chk{display:flex;gap:16px;margin:10px 0;flex-wrap:wrap}.chk label{display:flex;gap:6px;align-items:center}
+.modalbg{position:fixed;inset:0;background:rgba(10,20,35,.55);z-index:60;display:flex;align-items:flex-start;justify-content:center;padding:4vh 12px;overflow:auto}
+.modal{background:var(--card);border-radius:var(--r);width:100%;max-width:720px;padding:20px}
 .modal h2{margin:0 0 12px}
 .modal .acts{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap}
-.sub{margin:16px 0 6px;font-weight:700}
+.sbh{margin:16px 0 6px;font-weight:700}
 .line{display:grid;gap:8px;grid-template-columns:1fr 1fr 1.2fr 1fr auto;margin-bottom:8px;align-items:center}
 .line.t{grid-template-columns:1fr 1fr auto}
 .line input{padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card);min-width:0}
-.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 18px;border-radius:999px;z-index:50;font-weight:600}
-@media (max-width:640px){.row2,.row3{grid-template-columns:1fr}.line{grid-template-columns:1fr 1fr}.line.t{grid-template-columns:1fr 1fr auto}}
+.tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#16202b;color:#fff;padding:10px 18px;border-radius:999px;z-index:90;font-weight:600}
+.stars{color:var(--warn);letter-spacing:1px}
+@media (max-width:1180px){.top4{grid-template-columns:repeat(2,1fr)}.top4>.rev{grid-column:1/-1}.c3{grid-template-columns:1fr 1fr}.c4b{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:860px){
+ aside{position:fixed;left:-260px;width:250px;transition:left .2s}
+ body.menu aside{left:0}
+ body.menu::after{content:"";position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:25}
+ .burger{display:block}.search{display:none}.me div{display:none}
+ .c4,.c2,.c3,.c22,.c4b,.top4{grid-template-columns:1fr}
+ main{padding:14px}header.top{padding:10px 14px}
+ .row2,.row3{grid-template-columns:1fr}.line{grid-template-columns:1fr 1fr}.line.t{grid-template-columns:1fr 1fr auto}
+ body.collapsed aside{width:250px}
+}
 </style>
 </head>
 <body>
@@ -81,18 +155,23 @@ img.th{width:44px;height:44px;border-radius:8px;object-fit:cover;background:var(
 </div>
 
 <div id="appView" class="hidden">
-  <header class="top">
-    <span class="logo">FULL SELLER</span>
-    <nav id="nav">
-      <button data-t="dash" class="on">Дашборд</button>
-      <button data-t="orders">Заказы</button>
-      <button data-t="users">Клиенты</button>
-      <button data-t="products">Товары</button>
-    </nav>
-    <span class="who" id="who"></span>
-    <button class="btn ghost sm" id="logout">Выйти</button>
-  </header>
-  <main id="main"></main>
+  <aside>
+    <div class="brand"><div class="lg">F</div><span class="nm">Full Seller</span></div>
+    <nav id="nav"></nav>
+    <div class="foot"><button class="ni" id="collapse"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg><span class="tx">Свернуть</span></button></div>
+  </aside>
+  <div class="wrap">
+    <header class="top">
+      <button class="ib burger" id="burger"><svg class="i" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+      <h1 id="title">Дашборд</h1>
+      <div class="search"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="gs" type="search" placeholder="Поиск по заказам и клиентам (Enter)…"></div>
+      <button class="ib" id="bell" title="Уведомления"><svg class="i" viewBox="0 0 24 24"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><span class="bd hidden" id="bellN"></span></button>
+      <button class="ib" id="refresh" title="Обновить"><svg class="i" viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14.9-3M4 5v4h4"/><path d="M4 13a8 8 0 0 0 14.9 3M20 19v-4h-4"/></svg></button>
+      <button class="ib" id="logout" title="Выйти"><svg class="i" viewBox="0 0 24 24"><path d="M9 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h4M16 8l4 4-4 4M20 12H9"/></svg></button>
+      <div class="me"><div class="av" id="avL">A</div><div><b id="meN">Admin</b><small id="meR">Администратор</small></div></div>
+    </header>
+    <main id="main"></main>
+  </div>
 </div>
 
 <div id="modalRoot"></div>
@@ -106,104 +185,111 @@ var ORDER_ST = ['Новый','В обработке','В пути','Достав
 var ROLES = ['Покупатель','Юр. лицо','Менеджер','Админ','Суперадмин'];
 var PAY = ['Карта','Счёт'];
 var COUNTRY = ['Россия','Таджикистан'];
+var CUR = '₽';
 var $ = function(s,r){return (r||document).querySelector(s)};
-var state = {tab:'dash'};
+var state = {};
 
+// ---------- утилиты ----------
 function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
-function money(n){return Number(n||0).toLocaleString('ru-RU',{maximumFractionDigits:2})}
-function dt(s){if(!s)return '';var d=new Date(s.endsWith('Z')||/[+-]\d\d:\d\d$/.test(s)?s:s+'Z');return d.toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'})}
+function num(n){return Number(n||0).toLocaleString('ru-RU',{maximumFractionDigits:2})}
+function money(n){return num(n)+' '+CUR}
+function pd(s){if(!s)return new Date(0);return new Date(/[zZ]$|[+-]\d\d:\d\d$/.test(s)?s:s+'Z')}
+function dt(s){return pd(s).toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'})}
+function dkey(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function dlabel(d){return String(d.getDate()).padStart(2,'0')+'.'+String(d.getMonth()+1).padStart(2,'0')}
+function lastDays(n){var a=[],t=new Date();t.setHours(0,0,0,0);for(var i=n-1;i>=0;i--){var d=new Date(t);d.setDate(t.getDate()-i);a.push(d)}return a}
 function toast(t){var el=$('#toast');el.textContent=t;el.classList.remove('hidden');clearTimeout(toast._t);toast._t=setTimeout(function(){el.classList.add('hidden')},2600)}
+function debounce(fn,ms){var t;return function(){var a=arguments,c=this;clearTimeout(t);t=setTimeout(function(){fn.apply(c,a)},ms)}}
+var ICONS={
+ dash:'<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>',
+ orders:'<path d="M9 4h6a1 1 0 0 1 1 1v1H8V5a1 1 0 0 1 1-1z"/><path d="M8 6H6a1 1 0 0 0-1 1v13a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1h-2"/><path d="M9 12h6M9 16h4"/>',
+ factory:'<path d="M3 21V10l6 4v-4l6 4V6h3a1 1 0 0 1 1 1v14z"/><path d="M8 17h2M13 17h2"/>',
+ box:'<path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="m3 8 9 5 9-5M12 13v8"/>',
+ users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.5 3-6 6.5-6s6.5 2.5 6.5 6"/><path d="M16 5a3.5 3.5 0 0 1 0 7M18 14c2 .6 3.5 2.4 3.5 5"/>',
+ star:'<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',
+ wallet:'<rect x="3" y="6" width="18" height="14" rx="2"/><path d="M3 10h18M16 15h2"/>',
+ chart:'<path d="M4 20V4M4 20h16"/><path d="M8 16v-4M12 16V8M16 16v-6"/>',
+ cog:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
+ chev:'<path d="m9 6 6 6-6 6"/>',
+ ok:'<circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/>',
+ clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+ x:'<circle cx="12" cy="12" r="9"/><path d="m9 9 6 6M15 9l-6 6"/>'
+};
+function ic(n){return '<svg class="i" viewBox="0 0 24 24">'+(ICONS[n]||'')+'</svg>'}
 
-// ---------- токены ----------
+// ---------- токены / api ----------
 function getTok(){try{return JSON.parse(localStorage.getItem('fsAdminTok')||'null')}catch(e){return null}}
 function setTok(t){try{if(t)localStorage.setItem('fsAdminTok',JSON.stringify(t));else localStorage.removeItem('fsAdminTok')}catch(e){}state.tok=t}
-state.tok = getTok();
+state.tok=getTok();
 function jwt(t){try{var p=t.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');return JSON.parse(decodeURIComponent(escape(atob(p))))}catch(e){return {}}}
-
 async function raw(path,opt){
-  opt=opt||{};
-  var h={'Accept':'application/json'};
+  opt=opt||{};var h={'Accept':'application/json'};
   if(opt.body!==undefined)h['Content-Type']='application/json';
   if(state.tok&&!opt.noAuth)h['Authorization']='Bearer '+state.tok.accessToken;
-  var ctl=new AbortController();var to=setTimeout(function(){ctl.abort()},20000);
-  try{
-    return await fetch(API+path,{method:opt.method||'GET',headers:h,body:opt.body!==undefined?JSON.stringify(opt.body):undefined,signal:ctl.signal,cache:'no-store'});
-  }finally{clearTimeout(to)}
+  var ctl=new AbortController();var to=setTimeout(function(){ctl.abort()},25000);
+  try{return await fetch(API+path,{method:opt.method||'GET',headers:h,body:opt.body!==undefined?JSON.stringify(opt.body):undefined,signal:ctl.signal,cache:'no-store'})}
+  finally{clearTimeout(to)}
 }
-async function refresh(){
+async function refreshTok(){
   if(!state.tok||!state.tok.refreshToken)return false;
-  try{
-    var r=await raw('/auth/refresh',{method:'POST',body:{refreshToken:state.tok.refreshToken},noAuth:true});
-    if(!r.ok)return false;
-    setTok(await r.json());return true;
-  }catch(e){return false}
+  try{var r=await raw('/auth/refresh',{method:'POST',body:{refreshToken:state.tok.refreshToken},noAuth:true});if(!r.ok)return false;setTok(await r.json());return true}catch(e){return false}
 }
 async function api(path,opt){
   var r;
   try{r=await raw(path,opt)}catch(e){throw new Error('Нет связи с сервером')}
-  if(r.status===401&&await refresh()){try{r=await raw(path,opt)}catch(e){throw new Error('Нет связи с сервером')}}
+  if(r.status===401&&await refreshTok()){try{r=await raw(path,opt)}catch(e){throw new Error('Нет связи с сервером')}}
   if(r.status===401){logout();throw new Error('Сессия истекла, войдите заново')}
   if(r.status===403)throw new Error('Недостаточно прав для этого действия');
-  if(!r.ok){
-    var msg='Ошибка '+r.status;
-    try{var j=await r.json();msg=j.detail||j.title||j.message||j.error||msg}catch(e){}
-    throw new Error(msg);
-  }
+  if(!r.ok){var msg='Ошибка '+r.status;try{var j=await r.json();msg=j.detail||j.title||j.message||j.error||msg}catch(e){}throw new Error(msg)}
   if(r.status===204)return null;
-  var ct=r.headers.get('content-type')||'';
-  return ct.indexOf('json')>=0?r.json():null;
+  return (r.headers.get('content-type')||'').indexOf('json')>=0?r.json():null;
 }
+
+// ---------- кэш данных ----------
+var cache={};
+function dropCache(){cache={}}
+async function cached(key,fn,ttl){
+  var c=cache[key];if(c&&Date.now()-c.t<(ttl||60000))return c.v;
+  var v=await fn();cache[key]={t:Date.now(),v:v};return v;
+}
+async function pagedAll(path,pageSize,maxPages){
+  var all=[],total=0;
+  for(var p=1;p<=maxPages;p++){
+    var r=await api(path+(path.indexOf('?')>=0?'&':'?')+'page='+p+'&pageSize='+pageSize);
+    total=r.totalCount;all=all.concat(r.items);
+    if(all.length>=total||!r.items.length)break;
+  }
+  return {items:all,total:total};
+}
+function allOrders(){return cached('orders',function(){return pagedAll('/admin/orders',200,10)})}
+function allUsers(){return cached('users',function(){return pagedAll('/admin/users',200,10)})}
+function partners(){return cached('partners',function(){return api('/admin/partners')})}
+function pendingReviews(){return cached('pend',function(){return api('/reviews/moderation').catch(function(){return []})},30000)}
+function dashboard(){return cached('dash',function(){return api('/admin/dashboard')},30000)}
+function catalogMap(){return cached('catmap',async function(){var r=await pagedAll('/admin/catalog/products',200,5);var m={};r.items.forEach(function(p){m[p.id]=p});return m},120000)}
 
 // ---------- вход ----------
 function showLogin(){$('#appView').classList.add('hidden');$('#loginView').classList.remove('hidden')}
-function logout(){setTok(null);showLogin()}
+function logout(){setTok(null);dropCache();showLogin()}
 $('#logout').onclick=logout;
 $('#loginForm').onsubmit=async function(e){
-  e.preventDefault();
-  var err=$('#lErr');err.classList.add('hidden');
+  e.preventDefault();var err=$('#lErr');err.classList.add('hidden');
   var b=$('#lBtn');b.disabled=true;b.textContent='Входим…';
   try{
     var r=await raw('/auth/login',{method:'POST',noAuth:true,body:{phone:$('#lPhone').value.trim(),password:$('#lPass').value}});
-    if(!r.ok){var m='Неверный телефон или пароль';if(r.status>=500)m='Сервер недоступен, попробуйте позже';throw new Error(m)}
-    var tok=await r.json();
-    var role=jwt(tok.accessToken).role;
+    if(!r.ok){throw new Error(r.status>=500?'Сервер недоступен, попробуйте позже':'Неверный телефон или пароль')}
+    var tok=await r.json();var role=jwt(tok.accessToken).role;
     if(role!=='Admin'&&role!=='SuperAdmin')throw new Error('У этого аккаунта нет прав администратора');
-    setTok(tok);$('#lPass').value='';enter();
+    setTok(tok);$('#lPass').value='';start();
   }catch(ex){err.textContent=ex.message||'Ошибка входа';err.classList.remove('hidden')}
   finally{b.disabled=false;b.textContent='Войти'}
 };
-function enter(){
-  $('#loginView').classList.add('hidden');$('#appView').classList.remove('hidden');
-  var c=jwt(state.tok.accessToken);
-  state.role=c.role;
-  $('#who').textContent=(ROLES[c.role==='SuperAdmin'?4:3])+(c.phone_number?' · '+c.phone_number:'');
-  go(state.tab||'dash');
-}
-$('#nav').onclick=function(e){var b=e.target.closest('button');if(b)go(b.dataset.t)};
-function go(t){
-  state.tab=t;
-  [].forEach.call(document.querySelectorAll('#nav button'),function(b){b.classList.toggle('on',b.dataset.t===t)});
-  var f={dash:viewDash,orders:viewOrders,users:viewUsers,products:viewProducts}[t];
-  $('#main').innerHTML='<p class="muted">Загрузка…</p>';
-  f().catch(function(e){$('#main').innerHTML='<p class="err">'+esc(e.message)+'</p>'});
-}
-function pager(total,page,size,cb){
-  var pages=Math.max(1,Math.ceil(total/size));
-  var d=document.createElement('div');d.className='pager';
-  d.innerHTML='<button class="btn ghost sm" '+(page<=1?'disabled':'')+'>←</button><span>Стр. '+page+' из '+pages+' · всего '+total+'</span><button class="btn ghost sm" '+(page>=pages?'disabled':'')+'>→</button>';
-  var bs=d.querySelectorAll('button');bs[0].onclick=function(){cb(page-1)};bs[1].onclick=function(){cb(page+1)};
-  return d;
-}
-function debounce(fn,ms){var t;return function(){var a=arguments,c=this;clearTimeout(t);t=setTimeout(function(){fn.apply(c,a)},ms)}}
 
-// ---------- модалка ----------
+// ---------- модалки ----------
 function modal(html,onMount){
-  var root=$('#modalRoot');
-  root.innerHTML='<div class="modalbg"><div class="modal">'+html+'</div></div>';
-  var bg=root.firstChild;
-  bg.addEventListener('mousedown',function(e){if(e.target===bg)closeModal()});
-  if(onMount)onMount(bg.firstChild);
-  return bg.firstChild;
+  var root=$('#modalRoot');root.innerHTML='<div class="modalbg"><div class="modal">'+html+'</div></div>';
+  var bg=root.firstChild;bg.addEventListener('mousedown',function(e){if(e.target===bg)closeModal()});
+  if(onMount)onMount(bg.firstChild);return bg.firstChild;
 }
 function closeModal(){$('#modalRoot').innerHTML=''}
 function confirmBox(text,okLabel){
@@ -213,187 +299,422 @@ function confirmBox(text,okLabel){
     m.querySelector('#cy').onclick=function(){closeModal();res(true)};
   });
 }
+function pager(total,page,size,cb){
+  var pages=Math.max(1,Math.ceil(total/size));var d=document.createElement('div');d.className='pager';
+  d.innerHTML='<button class="btn ghost sm" '+(page<=1?'disabled':'')+'>←</button><span>Стр. '+page+' из '+pages+' · всего '+total+'</span><button class="btn ghost sm" '+(page>=pages?'disabled':'')+'>→</button>';
+  var bs=d.querySelectorAll('button');bs[0].onclick=function(){cb(page-1)};bs[1].onclick=function(){cb(page+1)};return d;
+}
+
+// ---------- графики ----------
+function compact(v){var a=Math.abs(v);if(a>=1e6)return (v/1e6).toFixed(a>=1e7?0:1).replace('.0','')+'M';if(a>=1e3)return (v/1e3).toFixed(a>=1e4?0:1).replace('.0','')+'k';return String(Math.round(v*10)/10)}
+function niceTop(max){
+  if(max<=0)return 4;var raw=max/4,pow=Math.pow(10,Math.floor(Math.log10(raw))),f=raw/pow;
+  var m=f<=1?1:f<=2?2:f<=2.5?2.5:f<=5?5:10;var step=m*pow;return step*4;
+}
+function lineChart(pts,color,fmt){
+  var W=360,H=220,L=40,R=16,T=12,B=26;
+  var max=0;pts.forEach(function(p){if(p.v>max)max=p.v});
+  var top=niceTop(max);
+  var iw=W-L-R,ih=H-T-B,n=pts.length;
+  function X(i){return L+(n<2?iw/2:i*iw/(n-1))}
+  function Y(v){return T+ih-(v/top)*ih}
+  var s='<svg class="chart" viewBox="0 0 '+W+' '+H+'">';
+  for(var g=0;g<=4;g++){var gv=top*g/4,gy=Y(gv);s+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+gy+'" y2="'+gy+'" stroke="#e6ebe8"/><text x="'+(L-6)+'" y="'+(gy+4)+'" text-anchor="end">'+esc(compact(gv))+'</text>'}
+  var d='';pts.forEach(function(p,i){d+=(i?'L':'M')+X(i).toFixed(1)+' '+Y(p.v).toFixed(1)});
+  s+='<path d="'+d+'L'+X(n-1).toFixed(1)+' '+Y(0)+'L'+X(0).toFixed(1)+' '+Y(0)+'Z" fill="'+color+'" opacity=".12"/><path d="'+d+'" fill="none" stroke="'+color+'" stroke-width="2.4" stroke-linejoin="round"/>';
+  var step=Math.ceil(n/5),rad=n>20?2:3;
+  pts.forEach(function(p,i){
+    s+='<circle cx="'+X(i).toFixed(1)+'" cy="'+Y(p.v).toFixed(1)+'" r="'+rad+'" fill="#fff" stroke="'+color+'" stroke-width="2"><title>'+esc(p.l)+': '+esc(fmt?fmt(p.v):num(p.v))+'</title></circle>';
+    if(i%step===0&&i<=n-1-Math.max(1,Math.floor(step/2)))s+='<text x="'+X(i).toFixed(1)+'" y="'+(H-7)+'" text-anchor="middle">'+esc(p.l)+'</text>';
+  });
+  s+='<text x="'+X(n-1).toFixed(1)+'" y="'+(H-7)+'" text-anchor="end">'+esc(pts[n-1].l)+'</text>';
+  return s+'</svg>';
+}
+function daySeries(items,days,field,valueFn){
+  var map={};days.forEach(function(d){map[dkey(d)]=0});
+  items.forEach(function(it){var k=dkey(pd(it[field]));if(k in map)map[k]+=valueFn(it)});
+  return days.map(function(d){return {l:dlabel(d),v:map[dkey(d)]}});
+}
+function isLive(o){return o.status!==4}
+
+// ---------- меню ----------
+var MENU=[
+ {id:'dash',t:'Дашборд',i:'dash'},
+ {id:'orders',t:'Заказы',i:'orders',sub:[['all','Все заказы'],['new','Новые'],['processing','В обработке'],['transit','В пути'],['done','Доставлены'],['cancelled','Отменены']]},
+ {id:'producers',t:'Производители',i:'factory',sub:[['all','Все производители'],['active','Активные'],['off','Отключённые']]},
+ {id:'products',t:'Товары',i:'box'},
+ {id:'clients',t:'Клиенты',i:'users'},
+ {id:'reviews',t:'Отзывы',i:'star'},
+ {id:'finance',t:'Финансы',i:'wallet'},
+ {id:'analytics',t:'Аналитика',i:'chart'},
+ {id:'settings',t:'Настройки',i:'cog',sub:[['main','Основные'],['banners','Баннеры'],['promos','Промокоды']]}
+];
+var TITLES={dash:'Дашборд',orders:'Заказы',producers:'Производители',products:'Товары',clients:'Клиенты',reviews:'Отзывы',finance:'Финансы',analytics:'Аналитика',settings:'Настройки'};
+var ST_KEY={all:'',new:0,processing:1,transit:2,done:3,cancelled:4};
+var badges={orders:0,reviews:0};
+function route(){var h=(location.hash||'#/dash').replace(/^#\/?/,'').split('/');return {page:h[0]||'dash',sub:h[1]||''}}
+function renderNav(){
+  var r=route();var html='';
+  MENU.forEach(function(m){
+    var on=r.page===m.id,b=badges[m.id];
+    html+='<button class="ni'+(on?' on':'')+(m.sub&&on?' open':'')+'" data-go="'+m.id+(m.sub?'/'+m.sub[0][0]:'')+'">'+ic(m.i)+'<span class="tx">'+m.t+'</span>'+(b?'<span class="bd">'+b+'</span>':'')+(m.sub?'<span class="ch">'+ic('chev')+'</span>':'')+'</button>';
+    if(m.sub){html+='<div class="sub'+(on?' open':'')+'">'+m.sub.map(function(s){return '<button data-go="'+m.id+'/'+s[0]+'" class="'+(on&&(r.sub||m.sub[0][0])===s[0]?'on':'')+'">'+s[1]+'</button>'}).join('')+'</div>'}
+  });
+  $('#nav').innerHTML=html;
+}
+$('#nav').onclick=function(e){var b=e.target.closest('[data-go]');if(b){location.hash='#/'+b.dataset.go;document.body.classList.remove('menu')}};
+$('#collapse').onclick=function(){document.body.classList.toggle('collapsed')};
+$('#burger').onclick=function(){document.body.classList.toggle('menu')};
+$('#refresh').onclick=function(){dropCache();navigate();toast('Данные обновлены')};
+$('#gs').onkeydown=function(e){if(e.key==='Enter'){var q=this.value.trim();if(!q)return;state.search=q;this.value='';if(route().page==='clients'){state.cSearch=q;navigate()}else{state.oSearch=q;location.hash='#/orders/all';if(route().page==='orders')navigate()}}};
+$('#bell').onclick=function(){
+  var m=modal('<h2>Уведомления</h2>'+
+   '<div class="list"><div class="it"><div class="m"><b>Новых заказов: '+badges.orders+'</b><span>Ждут обработки</span></div><button class="btn sm" data-g="orders/new">Открыть</button></div>'+
+   '<div class="it"><div class="m"><b>Отзывов на модерации: '+badges.reviews+'</b><span>Ждут решения</span></div><button class="btn sm" data-g="reviews">Открыть</button></div></div>'+
+   '<div class="acts"><button class="btn ghost" id="bx">Закрыть</button></div>');
+  m.querySelector('#bx').onclick=closeModal;
+  m.querySelectorAll('[data-g]').forEach(function(b){b.onclick=function(){closeModal();location.hash='#/'+b.dataset.g}});
+};
+async function refreshBadges(){
+  try{
+    var d=await dashboard();var n=0;(d.ordersByStatus||[]).forEach(function(x){if(x.status===0)n=x.count});
+    badges.orders=n;
+  }catch(e){}
+  try{badges.reviews=(await pendingReviews()).length}catch(e){}
+  var t=badges.orders+badges.reviews;var bn=$('#bellN');bn.textContent=t;bn.classList.toggle('hidden',!t);
+  renderNav();
+}
+function navigate(){
+  var r=route();var f={dash:viewDash,orders:viewOrders,producers:viewProducers,products:viewProducts,clients:viewClients,reviews:viewReviews,finance:viewFinance,analytics:viewAnalytics,settings:viewSettings}[r.page];
+  if(!f){location.hash='#/dash';return}
+  $('#title').textContent=TITLES[r.page]||'';
+  renderNav();
+  $('#main').innerHTML='<p class="muted">Загрузка…</p>';
+  var token=state.navT=Date.now();
+  f(r.sub).catch(function(e){if(token===state.navT)$('#main').innerHTML='<p class="err">'+esc(e.message)+'</p>'});
+  refreshBadges();
+}
+window.addEventListener('hashchange',function(){if(state.tok)navigate()});
+function start(){
+  $('#loginView').classList.add('hidden');$('#appView').classList.remove('hidden');
+  var c=jwt(state.tok.accessToken);state.role=c.role;
+  $('#meN').textContent=c.role==='SuperAdmin'?'Суперадмин':'Админ';$('#meR').textContent='Администратор';
+  navigate();
+}
 
 // ---------- дашборд ----------
+function statCard(tone,icon,label,n,sub,subTone){
+  return '<div class="card stat"><div class="ico t-'+tone+'">'+ic(icon)+'</div><div><div class="l">'+esc(label)+'</div><div class="n">'+esc(n)+'</div><div class="s s-'+subTone+'">'+esc(sub)+'</div></div></div>';
+}
+function inPeriod(o,days){if(!days)return true;var t=new Date();t.setHours(0,0,0,0);t.setDate(t.getDate()-days+1);return pd(o.createdAt)>=t}
 async function viewDash(){
-  var d=await api('/admin/dashboard');
-  var by={};(d.ordersByStatus||[]).forEach(function(x){by[x.status]=x.count});
-  var st='';for(var i=0;i<5;i++)st+='<div class="card stat"><div class="n">'+(by[i]||0)+'</div><div class="l"><span class="pill s'+i+'">'+ORDER_ST[i]+'</span></div></div>';
-  $('#main').innerHTML=
-   '<div class="grid">'+
-   stat(d.totalUsers,'Клиентов всего')+stat(d.newUsersToday,'Новых сегодня')+stat(d.newUsersThisWeek,'Новых за неделю')+
-   stat(d.totalOrders,'Заказов всего')+stat(d.newOrdersToday,'Заказов сегодня')+
-   stat(money(d.totalRevenue),'Выручка всего')+stat(money(d.revenueToday),'Выручка сегодня')+
-   '</div><h3>Заказы по статусам</h3><div class="grid">'+st+'</div>';
-  function stat(n,l){return '<div class="card stat"><div class="n">'+esc(n)+'</div><div class="l">'+esc(l)+'</div></div>'}
+  var res=await Promise.all([dashboard(),allOrders(),allUsers(),partners().catch(function(){return []}),pendingReviews()]);
+  var dsh=res[0],orders=res[1].items,users=res[2].items,parts=res[3],pend=res[4];
+  var by={0:0,1:0,2:0,3:0,4:0};(dsh.ordersByStatus||[]).forEach(function(x){by[x.status]=x.count});
+  var work=by[0]+by[1]+by[2];
+  var period=state.revPeriod||30,ordFilter=state.dashFilter==null?'':state.dashFilter;
+  function draw(){
+    var po=orders.filter(function(o){return inPeriod(o,period)});
+    var live=po.filter(isLive),rev=live.reduce(function(s,o){return s+o.totalAmount},0);
+    var del=po.filter(function(o){return o.status===3}).reduce(function(s,o){return s+o.totalAmount},0);
+    var avg=live.length?rev/live.length:0;
+    var days=lastDays(14);
+    var recent=orders.slice().sort(function(a,b){return pd(b.createdAt)-pd(a.createdAt)}).filter(function(o){return ordFilter===''||o.status===ordFilter}).slice(0,6);
+    var newUsers=users.slice().sort(function(a,b){return pd(b.createdAt)-pd(a.createdAt)}).slice(0,5);
+    $('#main').innerHTML=
+    '<div class="row top4">'+
+      statCard('g','orders','Заказы',num(dsh.totalOrders),num(dsh.totalUsers)+' клиентов','g')+
+      statCard('b','ok','Доставлено',num(by[3]),num(parts.length)+' производителей','b')+
+      statCard('w','clock','В работе',num(work),num(by[0])+' новых','w')+
+      statCard('r','x','Отменено',num(by[4]),dsh.newOrdersToday+' новых сегодня','r')+
+      '<div class="card rev"><div class="hd"><h3>Выручка</h3><select class="mini" id="rp"><option value="7"'+(period===7?' selected':'')+'>Неделя</option><option value="30"'+(period===30?' selected':'')+'>Месяц</option><option value="0"'+(period===0?' selected':'')+'>Всё время</option></select></div>'+
+      '<div class="cols"><div><div class="l">Без отмен</div><div class="n">'+esc(num(rev))+'</div><div class="s">'+CUR+' · '+live.length+' зак.</div></div>'+
+      '<div><div class="l">Доставлено</div><div class="n">'+esc(num(del))+'</div><div class="s">'+CUR+'</div></div>'+
+      '<div><div class="l">Средний чек</div><div class="n">'+esc(num(avg))+'</div><div class="s">'+CUR+'</div></div></div></div>'+
+    '</div>'+
+    '<div class="row c4b">'+
+      '<div class="card"><h3>Заказы по дням</h3>'+lineChart(daySeries(orders,days,'createdAt',function(){return 1}),'#4caf50',function(v){return String(Math.round(v))})+'</div>'+
+      '<div class="card"><h3>Выручка по дням</h3>'+lineChart(daySeries(orders.filter(isLive),days,'createdAt',function(o){return o.totalAmount}),'#3b82f6',function(v){return num(Math.round(v))})+'</div>'+
+      '<div class="card"><h3>Новые клиенты по дням</h3>'+lineChart(daySeries(users,days,'createdAt',function(){return 1}),'#8b5cf6',function(v){return String(Math.round(v))})+'</div>'+
+      '<div class="card"><h3>Заказы по статусам</h3>'+statusBars(by)+'</div>'+
+    '</div>'+
+    '<div class="row c3">'+
+      '<div class="card"><div class="hd"><h3>Последние заказы</h3><a data-g="orders/all">Все</a></div><div class="chips" id="chips">'+
+        [['','Все'],[0,'Новые'],[1,'В работе'],[3,'Доставлено'],[4,'Отменено']].map(function(c){return '<span class="chip'+(ordFilter===c[0]?' on':'')+'" data-f="'+c[0]+'">'+c[1]+'</span>'}).join('')+'</div><div class="list">'+
+        (recent.length?recent.map(function(o){return '<div class="it" style="cursor:pointer" data-o="'+esc(o.id)+'"><div class="m"><b>'+esc(o.orderNumber)+' · '+esc(o.userFullName||o.userPhone)+'</b><span>'+esc(o.userPhone)+' · '+dt(o.createdAt)+'</span></div><div><div style="text-align:right;font-weight:700">'+esc(money(o.totalAmount))+'</div><span class="pill p'+o.status+'">'+ORDER_ST[o.status]+'</span></div></div>'}).join(''):'<div class="empty" style="padding:30px 0">Заказов нет</div>')+'</div></div>'+
+      '<div class="card"><div class="hd"><h3>Производители</h3><a data-g="producers/all">Все</a></div><div class="list">'+
+        (parts.length?parts.slice(0,5).map(function(p){return '<div class="it"><div class="bubble">'+esc((p.companyName||'?').charAt(0).toUpperCase())+'</div><div class="m"><b>'+esc(p.companyName)+'</b><span>'+esc(p.contactName||'')+' · '+esc(p.phone||'')+'</span></div><span class="pill '+(p.isActive?'p3':'poff')+'">'+(p.isActive?'Активен':'Отключён')+'</span></div>'}).join(''):'<div class="empty" style="padding:30px 0">Производителей пока нет</div>')+'</div></div>'+
+      '<div class="card"><div class="hd"><h3>Новые клиенты</h3><a data-g="clients">Все</a></div><div class="list">'+
+        (newUsers.length?newUsers.map(function(u){return '<div class="it"><div class="bubble">'+esc((u.fullName||u.phone||'?').replace('+','').charAt(0).toUpperCase())+'</div><div class="m"><b>'+esc(u.fullName||u.phone)+'</b><span>'+esc(u.phone)+' · '+dt(u.createdAt)+'</span></div></div>'}).join(''):'<div class="empty" style="padding:30px 0">Клиентов пока нет</div>')+'</div>'+
+        (pend.length?'<p class="muted" style="margin:10px 0 0">Отзывов на модерации: <b>'+pend.length+'</b> — <a data-g="reviews" style="color:var(--g-d);cursor:pointer;font-weight:700">открыть</a></p>':'')+'</div>'+
+    '</div>';
+    $('#rp').onchange=function(){state.revPeriod=+this.value;period=state.revPeriod;draw()};
+    $('#chips').onclick=function(e){var c=e.target.closest('.chip');if(!c)return;ordFilter=c.dataset.f===''?'':+c.dataset.f;state.dashFilter=ordFilter;draw()};
+    bindGo($('#main'));
+    $('#main').querySelectorAll('[data-o]').forEach(function(el){el.onclick=function(){openOrder(el.dataset.o)}});
+  }
+  draw();
+}
+function bindGo(root){root.querySelectorAll('[data-g]').forEach(function(a){a.onclick=function(){location.hash='#/'+a.dataset.g}})}
+function statusBars(by){
+  var total=0;for(var i=0;i<5;i++)total+=by[i]||0;var cols=['#3b82f6','#f5a524','#8b5cf6','#4caf50','#e5484d'];
+  return ORDER_ST.map(function(s,i){var v=by[i]||0;var w=total?Math.round(v/total*100):0;return '<div class="hbar"><div class="nm">'+s+'</div><div class="tr"><i style="width:'+w+'%;background:'+cols[i]+'"></i></div><div class="v">'+v+'</div></div>'}).join('')+(total?'':'<p class="muted">Заказов пока нет</p>');
 }
 
 // ---------- заказы ----------
-var oq={page:1,status:'',search:''};
-async function viewOrders(){
-  var main=$('#main');
-  main.innerHTML='<div class="bar"><input type="search" id="oS" placeholder="Номер заказа или телефон" value="'+esc(oq.search)+'"><select id="oF"><option value="">Все статусы</option>'+
-    ORDER_ST.map(function(s,i){return '<option value="'+i+'"'+(String(oq.status)===String(i)?' selected':'')+'>'+s+'</option>'}).join('')+
-    '</select></div><div id="oT"></div>';
-  $('#oS').oninput=debounce(function(){oq.search=this.value.trim();oq.page=1;loadOrders()},350);
-  $('#oF').onchange=function(){oq.status=this.value;oq.page=1;loadOrders()};
-  await loadOrders();
-}
-async function loadOrders(){
-  var q='?page='+oq.page+'&pageSize=20'+(oq.status!==''?'&status='+oq.status:'')+(oq.search?'&search='+encodeURIComponent(oq.search):'');
-  var r=await api('/admin/orders'+q);
-  var box=$('#oT');if(!box)return;
-  var rows=r.items.map(function(o){return '<tr class="click" data-id="'+esc(o.id)+'"><td><b>'+esc(o.orderNumber)+'</b></td><td>'+esc(o.userFullName||'—')+'<div class="muted">'+esc(o.userPhone)+'</div></td><td><span class="pill s'+o.status+'">'+ORDER_ST[o.status]+'</span></td><td>'+money(o.totalAmount)+'</td><td>'+money(o.deliveryCost)+'</td><td class="muted">'+dt(o.createdAt)+'</td></tr>'}).join('');
-  box.innerHTML='<div class="tablewrap"><table><thead><tr><th>№</th><th>Клиент</th><th>Статус</th><th>Сумма</th><th>Доставка</th><th>Создан</th></tr></thead><tbody>'+(rows||'<tr><td colspan="6" class="muted">Заказов нет</td></tr>')+'</tbody></table></div>';
-  box.appendChild(pager(r.totalCount,r.page,r.pageSize,function(p){oq.page=p;loadOrders()}));
-  box.querySelectorAll('tr.click').forEach(function(tr){tr.onclick=function(){openOrder(tr.dataset.id)}});
+var oq={page:1,search:''};
+async function viewOrders(sub){
+  sub=sub||'all';var status=ST_KEY[sub];if(status==null)status='';
+  if(state.oSearch!=null){oq.search=state.oSearch;state.oSearch=null;oq.page=1}
+  if(state.lastOSub!==sub){oq.page=1;state.lastOSub=sub}
+  $('#main').innerHTML='<div class="bar"><input type="search" id="oS" placeholder="Номер заказа или телефон" value="'+esc(oq.search)+'"><span class="muted">Фильтр: <b>'+(status===''?'все статусы':ORDER_ST[status])+'</b> (выбирается в меню слева)</span></div><div id="oT"></div>';
+  $('#oS').oninput=debounce(function(){oq.search=this.value.trim();oq.page=1;load()},350);
+  async function load(){
+    var q='?page='+oq.page+'&pageSize=20'+(status!==''?'&status='+status:'')+(oq.search?'&search='+encodeURIComponent(oq.search):'');
+    var r=await api('/admin/orders'+q);var box=$('#oT');if(!box)return;
+    var rows=r.items.map(function(o){return '<tr class="click" data-id="'+esc(o.id)+'"><td><b>'+esc(o.orderNumber)+'</b></td><td>'+esc(o.userFullName||'—')+'<div class="muted">'+esc(o.userPhone)+'</div></td><td><span class="pill p'+o.status+'">'+ORDER_ST[o.status]+'</span></td><td>'+esc(money(o.totalAmount))+'</td><td>'+esc(money(o.deliveryCost))+'</td><td class="muted">'+dt(o.createdAt)+'</td></tr>'}).join('');
+    box.innerHTML='<div class="tablewrap"><table><thead><tr><th>№</th><th>Клиент</th><th>Статус</th><th>Сумма</th><th>Доставка</th><th>Создан</th></tr></thead><tbody>'+(rows||'<tr><td colspan="6" class="muted">Заказов нет</td></tr>')+'</tbody></table></div>';
+    box.appendChild(pager(r.totalCount,r.page,r.pageSize,function(p){oq.page=p;load()}));
+    box.querySelectorAll('tr.click').forEach(function(tr){tr.onclick=function(){openOrder(tr.dataset.id)}});
+  }
+  state.reloadOrders=load;
+  await load();
 }
 async function openOrder(id){
   var o,h;
-  try{[o,h]=await Promise.all([api('/orders/'+id),api('/orders/'+id+'/status-history').catch(function(){return []})])}catch(e){return toast(e.message)}
-  var items=(o.items||[]).map(function(i){return '<tr><td>'+esc(i.productName)+'</td><td>'+i.quantity+'</td><td>'+money(i.unitPrice)+'</td><td>'+money(i.quantity*i.unitPrice)+'</td></tr>'}).join('');
+  try{var rr=await Promise.all([api('/orders/'+id),api('/orders/'+id+'/status-history').catch(function(){return []})]);o=rr[0];h=rr[1]}catch(e){return toast(e.message)}
+  var items=(o.items||[]).map(function(i){return '<tr><td>'+esc(i.productName)+'</td><td>'+i.quantity+'</td><td>'+esc(money(i.unitPrice))+'</td><td>'+esc(money(i.quantity*i.unitPrice))+'</td></tr>'}).join('');
   var hist=(h||[]).map(function(x){return '<div class="muted">'+dt(x.changedAt)+' — <b>'+ORDER_ST[x.status]+'</b>'+(x.comment?': '+esc(x.comment):'')+'</div>'}).join('');
-  var m=modal('<h2>Заказ '+esc(o.orderNumber)+'</h2>'+
-    '<div class="muted">'+dt(o.createdAt)+' · '+esc(COUNTRY[o.deliveryCountry]||'')+' · оплата: '+esc(PAY[o.paymentMethod]||'')+'</div>'+
+  var m=modal('<h2>Заказ '+esc(o.orderNumber)+'</h2><div class="muted">'+dt(o.createdAt)+' · '+esc(COUNTRY[o.deliveryCountry]||'')+' · оплата: '+esc(PAY[o.paymentMethod]||'')+'</div>'+
     '<div class="tablewrap" style="margin:12px 0"><table style="min-width:420px"><thead><tr><th>Товар</th><th>Кол-во</th><th>Цена</th><th>Сумма</th></tr></thead><tbody>'+items+'</tbody></table></div>'+
-    '<div>Доставка: <b>'+money(o.deliveryCost)+'</b> · Итого: <b>'+money(o.totalAmount)+'</b></div>'+
-    '<div class="sub">Сменить статус</div>'+
+    '<div>Доставка: <b>'+esc(money(o.deliveryCost))+'</b> · Итого: <b>'+esc(money(o.totalAmount))+'</b></div>'+
+    '<div class="sbh">Сменить статус</div>'+
     '<div class="row2"><label class="field"><span>Статус</span><select id="mSt">'+ORDER_ST.map(function(s,i){return '<option value="'+i+'"'+(o.status===i?' selected':'')+'>'+s+'</option>'}).join('')+'</select></label>'+
     '<label class="field"><span>Трек-номер груза</span><input id="mTr" value="'+esc(o.cargoTrackingNumber||'')+'"></label></div>'+
     '<label class="field"><span>Комментарий (виден в истории)</span><input id="mCm"></label>'+
-    (hist?'<div class="sub">История</div>'+hist:'')+
-    '<div id="mErr" class="err hidden"></div>'+
+    (hist?'<div class="sbh">История</div>'+hist:'')+'<div id="mErr" class="err hidden"></div>'+
     '<div class="acts"><button class="btn ghost" id="mX">Закрыть</button><button class="btn" id="mOk">Сохранить статус</button></div>');
   m.querySelector('#mX').onclick=closeModal;
   m.querySelector('#mOk').onclick=async function(){
     try{
       await api('/orders/'+id+'/status',{method:'PUT',body:{status:+m.querySelector('#mSt').value,cargoTrackingNumber:m.querySelector('#mTr').value.trim()||null,comment:m.querySelector('#mCm').value.trim()||null}});
-      closeModal();toast('Статус обновлён');loadOrders();
+      closeModal();toast('Статус обновлён');dropCache();navigate();
     }catch(e){var er=m.querySelector('#mErr');er.textContent=e.message;er.classList.remove('hidden')}
+  };
+}
+
+// ---------- производители ----------
+async function viewProducers(sub){
+  sub=sub||'all';var list=await partners();
+  var shown=list.filter(function(p){return sub==='all'||(sub==='active'?p.isActive:!p.isActive)});
+  var rows=shown.map(function(p){return '<tr><td><div style="display:flex;gap:10px;align-items:center"><div class="bubble">'+esc((p.companyName||'?').charAt(0).toUpperCase())+'</div><b>'+esc(p.companyName)+'</b></div></td><td>'+esc(p.contactName||'—')+'</td><td>'+esc(p.phone||'—')+'</td><td>'+esc(p.login)+'</td><td><span class="pill '+(p.isActive?'p3':'poff')+'">'+(p.isActive?'Активен':'Отключён')+'</span></td><td class="muted">'+dt(p.createdAt)+'</td></tr>'}).join('');
+  $('#main').innerHTML='<div class="bar"><button class="btn" id="pAdd">+ Добавить производителя</button><span class="muted">Производитель входит в свой кабинет по логину и паролю, добавляет товары — они попадают в каталог после проверки.</span></div>'+
+   '<div class="tablewrap"><table><thead><tr><th>Компания</th><th>Контакт</th><th>Телефон</th><th>Логин</th><th>Статус</th><th>Добавлен</th></tr></thead><tbody>'+(rows||'<tr><td colspan="6" class="muted">Производителей нет</td></tr>')+'</tbody></table></div>';
+  $('#pAdd').onclick=function(){
+    var m=modal('<h2>Новый производитель</h2><label class="field"><span>Название компании</span><input id="cC"></label><div class="row2"><label class="field"><span>Контактное лицо</span><input id="cN"></label><label class="field"><span>Телефон</span><input id="cP" type="tel"></label></div>'+
+      '<div class="row2"><label class="field"><span>Логин для кабинета</span><input id="cL" autocomplete="off"></label><label class="field"><span>Пароль для кабинета</span><input id="cW" type="text" autocomplete="off"></label></div><div id="cE" class="err hidden"></div>'+
+      '<div class="acts"><button class="btn ghost" id="cX">Отмена</button><button class="btn" id="cOk">Создать</button></div>');
+    m.querySelector('#cX').onclick=closeModal;
+    m.querySelector('#cOk').onclick=async function(){
+      var b={companyName:m.querySelector('#cC').value.trim(),contactName:m.querySelector('#cN').value.trim(),phone:m.querySelector('#cP').value.trim(),login:m.querySelector('#cL').value.trim(),password:m.querySelector('#cW').value};
+      var er=m.querySelector('#cE');
+      if(!b.companyName||!b.login||b.password.length<6){er.textContent='Укажите название, логин и пароль (от 6 символов)';er.classList.remove('hidden');return}
+      try{await api('/admin/partners',{method:'POST',body:b});closeModal();toast('Производитель добавлен');dropCache();navigate()}catch(e){er.textContent=e.message;er.classList.remove('hidden')}
+    };
   };
 }
 
 // ---------- клиенты ----------
 var uq={page:1,role:'',search:''};
-async function viewUsers(){
-  $('#main').innerHTML='<div class="bar"><input type="search" id="uS" placeholder="Поиск по телефону или имени" value="'+esc(uq.search)+'"><select id="uF"><option value="">Все роли</option>'+
-    ROLES.map(function(s,i){return '<option value="'+i+'"'+(String(uq.role)===String(i)?' selected':'')+'>'+s+'</option>'}).join('')+'</select></div><div id="uT"></div>';
-  $('#uS').oninput=debounce(function(){uq.search=this.value.trim();uq.page=1;loadUsers()},350);
-  $('#uF').onchange=function(){uq.role=this.value;uq.page=1;loadUsers()};
-  await loadUsers();
+async function viewClients(){
+  if(state.cSearch!=null){uq.search=state.cSearch;state.cSearch=null;uq.page=1}
+  $('#main').innerHTML='<div class="bar"><input type="search" id="uS" placeholder="Поиск по телефону или имени" value="'+esc(uq.search)+'"><select id="uF"><option value="">Все роли</option>'+ROLES.map(function(s,i){return '<option value="'+i+'"'+(String(uq.role)===String(i)?' selected':'')+'>'+s+'</option>'}).join('')+'</select></div><div id="uT"></div>';
+  $('#uS').oninput=debounce(function(){uq.search=this.value.trim();uq.page=1;load()},350);
+  $('#uF').onchange=function(){uq.role=this.value;uq.page=1;load()};
+  async function load(){
+    var q='?page='+uq.page+'&pageSize=20'+(uq.role!==''?'&role='+uq.role:'')+(uq.search?'&search='+encodeURIComponent(uq.search):'');
+    var r=await api('/admin/users'+q);var box=$('#uT');if(!box)return;
+    var rows=r.items.map(function(u){return '<tr><td><b>'+esc(u.phone)+'</b></td><td>'+esc(u.fullName||'—')+(u.isLegalEntity?'<div class="muted">'+esc(u.legalName||'Юр. лицо')+'</div>':'')+'</td><td><select class="mini" data-id="'+esc(u.id)+'" data-prev="'+u.role+'">'+ROLES.map(function(s,i){return '<option value="'+i+'"'+(u.role===i?' selected':'')+'>'+s+'</option>'}).join('')+'</select></td><td>'+u.loyaltyPoints+'</td><td class="muted">'+dt(u.createdAt)+'</td></tr>'}).join('');
+    box.innerHTML='<div class="tablewrap"><table><thead><tr><th>Телефон</th><th>Имя</th><th>Роль</th><th>Баллы</th><th>Регистрация</th></tr></thead><tbody>'+(rows||'<tr><td colspan="5" class="muted">Никого нет</td></tr>')+'</tbody></table></div>';
+    box.appendChild(pager(r.totalCount,r.page,r.pageSize,function(p){uq.page=p;load()}));
+    box.querySelectorAll('select[data-id]').forEach(function(sel){
+      sel.onchange=async function(){
+        var prev=sel.dataset.prev,role=+sel.value;
+        if(role>=3||+prev>=3){if(!await confirmBox('Изменить роль на «'+ROLES[role]+'»? Это даёт или забирает доступ к админке.','Изменить')){sel.value=prev;return}}
+        try{await api('/admin/users/'+sel.dataset.id+'/role',{method:'PUT',body:{role:role}});sel.dataset.prev=String(role);toast('Роль обновлена')}catch(e){sel.value=prev;toast(e.message)}
+      };
+    });
+  }
+  await load();
 }
-async function loadUsers(){
-  var q='?page='+uq.page+'&pageSize=20'+(uq.role!==''?'&role='+uq.role:'')+(uq.search?'&search='+encodeURIComponent(uq.search):'');
-  var r=await api('/admin/users'+q);
-  var box=$('#uT');if(!box)return;
-  var rows=r.items.map(function(u){return '<tr><td><b>'+esc(u.phone)+'</b></td><td>'+esc(u.fullName||'—')+(u.isLegalEntity?'<div class="muted">'+esc(u.legalName||'Юр. лицо')+'</div>':'')+'</td><td>'+
-    '<select data-id="'+esc(u.id)+'" data-prev="'+u.role+'">'+ROLES.map(function(s,i){return '<option value="'+i+'"'+(u.role===i?' selected':'')+'>'+s+'</option>'}).join('')+'</select></td><td>'+u.loyaltyPoints+'</td><td class="muted">'+dt(u.createdAt)+'</td></tr>'}).join('');
-  box.innerHTML='<div class="tablewrap"><table><thead><tr><th>Телефон</th><th>Имя</th><th>Роль</th><th>Баллы</th><th>Регистрация</th></tr></thead><tbody>'+(rows||'<tr><td colspan="5" class="muted">Никого нет</td></tr>')+'</tbody></table></div>';
-  box.appendChild(pager(r.totalCount,r.page,r.pageSize,function(p){uq.page=p;loadUsers()}));
-  box.querySelectorAll('select[data-id]').forEach(function(sel){
-    sel.onchange=async function(){
-      var prev=sel.dataset.prev,role=+sel.value;
-      if(role>=3||+prev>=3){
-        if(!await confirmBox('Изменить роль на «'+ROLES[role]+'»? Это даёт или забирает доступ к админке.','Изменить')){sel.value=prev;return}
-      }
-      try{await api('/admin/users/'+sel.dataset.id+'/role',{method:'PUT',body:{role:role}});sel.dataset.prev=String(role);toast('Роль обновлена')}
-      catch(e){sel.value=prev;toast(e.message)}
+
+// ---------- отзывы ----------
+async function viewReviews(){
+  var res=await Promise.all([api('/reviews/moderation'),catalogMap().catch(function(){return {}})]);
+  var list=res[0],pm=res[1];dropCache();
+  var html=list.map(function(r){var p=pm[r.productId];var st='';for(var i=1;i<=5;i++)st+=i<=r.rating?'★':'☆';
+    return '<div class="card" style="margin-bottom:12px"><div class="hd"><div><b>'+esc(p?p.name:'Товар')+'</b><div class="muted">'+dt(r.createdAt)+'</div></div><span class="stars">'+st+'</span></div>'+
+    '<p style="margin:0 0 8px">'+esc(r.text||'Без текста')+'</p>'+((r.photoUrls||[]).length?'<div style="display:flex;gap:8px;margin-bottom:10px">'+r.photoUrls.map(function(u){return '<a href="'+esc(u)+'" target="_blank" rel="noopener"><img class="th" src="'+esc(u)+'" alt=""></a>'}).join('')+'</div>':'')+
+    '<div style="display:flex;gap:8px"><button class="btn sm" data-ap="'+esc(r.id)+'">Опубликовать</button><button class="btn bad sm" data-rj="'+esc(r.id)+'">Отклонить</button></div></div>'}).join('');
+  $('#main').innerHTML=list.length?html:'<div class="card empty">Новых отзывов на модерации нет</div>';
+  async function act(id,ok){try{await api('/reviews/'+id+'/moderate',{method:'PUT',body:{approve:ok}});toast(ok?'Отзыв опубликован':'Отзыв отклонён');dropCache();navigate()}catch(e){toast(e.message)}}
+  $('#main').querySelectorAll('[data-ap]').forEach(function(b){b.onclick=function(){act(b.dataset.ap,true)}});
+  $('#main').querySelectorAll('[data-rj]').forEach(function(b){b.onclick=function(){act(b.dataset.rj,false)}});
+}
+
+// ---------- финансы ----------
+async function viewFinance(){
+  var orders=(await allOrders()).items;
+  var sum=function(f,fn){return orders.filter(f).reduce(function(s,o){return s+fn(o)},0)};
+  var live=sum(isLive,function(o){return o.totalAmount}),done=sum(function(o){return o.status===3},function(o){return o.totalAmount}),
+      prog=sum(function(o){return o.status<3},function(o){return o.totalAmount}),canc=sum(function(o){return o.status===4},function(o){return o.totalAmount}),
+      dlv=sum(isLive,function(o){return o.deliveryCost});
+  var months={};orders.forEach(function(o){var d=pd(o.createdAt);var k=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');var m=months[k]||(months[k]={n:0,rev:0,dl:0,c:0});m.n++;if(o.status===4)m.c+=o.totalAmount;else{m.rev+=o.totalAmount;m.dl+=o.deliveryCost}});
+  var keys=Object.keys(months).sort().reverse();
+  var rows=keys.map(function(k){var m=months[k];var p=k.split('-');return '<tr><td><b>'+p[1]+'.'+p[0]+'</b></td><td>'+m.n+'</td><td>'+esc(money(m.rev))+'</td><td>'+esc(money(m.dl))+'</td><td>'+esc(money(m.c))+'</td></tr>'}).join('');
+  $('#main').innerHTML='<div class="row c4">'+statCard('g','wallet','Выручка (без отмен)',money(live),orders.filter(isLive).length+' заказов','g')+statCard('b','ok','Получено (доставлено)',money(done),'','b')+statCard('w','clock','В процессе',money(prog),'ещё не доставлено','w')+statCard('r','x','Отменено',money(canc),'','r')+'</div>'+
+   '<div class="row c22"><div class="card"><h3>Выручка по дням (30 дней)</h3>'+lineChart(daySeries(orders.filter(isLive),lastDays(30),'createdAt',function(o){return o.totalAmount}),'#3b82f6',function(v){return num(Math.round(v))})+'</div>'+
+   '<div class="card"><h3>Итоги</h3><div class="hbar"><div class="nm" style="width:150px">Доставка (сумма)</div><div class="v" style="flex:1;text-align:right">'+esc(money(dlv))+'</div></div><div class="hbar"><div class="nm" style="width:150px">Средний чек</div><div class="v" style="flex:1;text-align:right">'+esc(money(orders.filter(isLive).length?live/orders.filter(isLive).length:0))+'</div></div><div class="hbar"><div class="nm" style="width:150px">Заказов всего</div><div class="v" style="flex:1;text-align:right">'+orders.length+'</div></div></div></div>'+
+   '<h3>По месяцам</h3><div class="tablewrap"><table><thead><tr><th>Месяц</th><th>Заказов</th><th>Выручка</th><th>Доставка</th><th>Отменено</th></tr></thead><tbody>'+(rows||'<tr><td colspan="5" class="muted">Данных нет</td></tr>')+'</tbody></table></div>';
+}
+
+// ---------- аналитика ----------
+async function viewAnalytics(){
+  var res=await Promise.all([allOrders(),allUsers()]);var orders=res[0].items,users=res[1].items;
+  var n=state.anDays||30;
+  var by={0:0,1:0,2:0,3:0,4:0};orders.forEach(function(o){by[o.status]++});
+  var spend={};orders.filter(isLive).forEach(function(o){var k=o.userPhone;var s=spend[k]||(spend[k]={name:o.userFullName,phone:o.userPhone,sum:0,n:0});s.sum+=o.totalAmount;s.n++});
+  var top=Object.keys(spend).map(function(k){return spend[k]}).sort(function(a,b){return b.sum-a.sum}).slice(0,10);
+  var days=lastDays(n),fmtI=function(v){return String(Math.round(v))};
+  $('#main').innerHTML='<div class="bar"><span class="muted">Период:</span><select class="mini" id="anD"><option value="7"'+(n===7?' selected':'')+'>7 дней</option><option value="30"'+(n===30?' selected':'')+'>30 дней</option><option value="90"'+(n===90?' selected':'')+'>90 дней</option></select></div>'+
+   '<div class="row c22"><div class="card"><h3>Заказы по дням</h3>'+lineChart(daySeries(orders,days,'createdAt',function(){return 1}),'#4caf50',fmtI)+'</div><div class="card"><h3>Выручка по дням</h3>'+lineChart(daySeries(orders.filter(isLive),days,'createdAt',function(o){return o.totalAmount}),'#3b82f6',function(v){return num(Math.round(v))})+'</div></div>'+
+   '<div class="row c22"><div class="card"><h3>Новые клиенты по дням</h3>'+lineChart(daySeries(users,days,'createdAt',function(){return 1}),'#8b5cf6',fmtI)+'</div><div class="card"><h3>Заказы по статусам</h3>'+statusBars(by)+'</div></div>'+
+   '<h3>Топ клиентов по сумме заказов</h3><div class="tablewrap"><table><thead><tr><th>#</th><th>Клиент</th><th>Телефон</th><th>Заказов</th><th>Сумма</th></tr></thead><tbody>'+(top.map(function(t,i){return '<tr><td>'+(i+1)+'</td><td>'+esc(t.name||'—')+'</td><td>'+esc(t.phone)+'</td><td>'+t.n+'</td><td><b>'+esc(money(t.sum))+'</b></td></tr>'}).join('')||'<tr><td colspan="5" class="muted">Данных нет</td></tr>')+'</tbody></table></div>';
+  $('#anD').onchange=function(){state.anDays=+this.value;navigate()};
+}
+
+// ---------- настройки ----------
+async function viewSettings(sub){
+  sub=sub||'main';
+  if(sub==='banners')return viewBanners();
+  if(sub==='promos')return viewPromos();
+  var s=await api('/settings',{noAuth:true});
+  $('#main').innerHTML='<div class="card" style="max-width:720px"><h3>Основные настройки</h3>'+
+   '<div class="row2"><label class="field"><span>Курс USD → RUB</span><input id="sR" type="number" step="0.01" min="0" value="'+esc(s.usdToRubRate)+'"></label><label class="field"><span>Минимальная сумма заказа</span><input id="sM" type="number" step="0.01" min="0" value="'+esc(s.minOrderAmount)+'"></label></div>'+
+   '<div class="row2"><label class="field"><span>Телефон</span><input id="sP" value="'+esc(s.contactPhone||'')+'"></label><label class="field"><span>Адрес</span><input id="sA" value="'+esc(s.contactAddress||'')+'"></label></div>'+
+   '<div class="row2"><label class="field"><span>WhatsApp (ссылка)</span><input id="sW" value="'+esc(s.whatsAppUrl||'')+'"></label><label class="field"><span>Telegram (ссылка)</span><input id="sT" value="'+esc(s.telegramUrl||'')+'"></label></div>'+
+   '<div id="sE" class="err hidden"></div><button class="btn" id="sOk">Сохранить</button> <span class="muted">Курс обновлён: '+dt(s.rateUpdatedAt)+'</span></div>';
+  $('#sOk').onclick=async function(){
+    var er=$('#sE');er.classList.add('hidden');
+    try{await api('/settings',{method:'PUT',body:{usdToRubRate:parseFloat($('#sR').value)||0,minOrderAmount:parseFloat($('#sM').value)||0,contactPhone:$('#sP').value.trim()||null,contactAddress:$('#sA').value.trim()||null,whatsAppUrl:$('#sW').value.trim()||null,telegramUrl:$('#sT').value.trim()||null}});toast('Настройки сохранены')}
+    catch(e){er.textContent=e.message;er.classList.remove('hidden')}
+  };
+}
+async function viewBanners(){
+  var list=await api('/banners/all');
+  var rows=list.map(function(b){return '<tr class="click" data-id="'+esc(b.id)+'"><td>'+(b.imageUrl?'<img class="th" src="'+esc(b.imageUrl)+'" alt="">':'<div class="th"></div>')+'</td><td><b>'+esc(b.title)+'</b><div class="muted">'+esc(b.subtitle||'')+'</div></td><td>'+b.sortOrder+'</td><td><span class="pill '+(b.isActive?'p3':'poff')+'">'+(b.isActive?'Показан':'Скрыт')+'</span></td></tr>'}).join('');
+  $('#main').innerHTML='<div class="bar"><button class="btn" id="bAdd">+ Добавить баннер</button></div><div class="tablewrap"><table><thead><tr><th></th><th>Баннер</th><th>Порядок</th><th>Статус</th></tr></thead><tbody>'+(rows||'<tr><td colspan="4" class="muted">Баннеров нет</td></tr>')+'</tbody></table></div>';
+  var map={};list.forEach(function(b){map[b.id]=b});
+  $('#bAdd').onclick=function(){editBanner(null)};
+  $('#main').querySelectorAll('tr.click').forEach(function(tr){tr.onclick=function(){editBanner(map[tr.dataset.id])}});
+}
+function editBanner(b){
+  var isNew=!b;b=b||{title:'',subtitle:'',imageUrl:'',linkUrl:'',sortOrder:0,isActive:true};
+  var m=modal('<h2>'+(isNew?'Новый баннер':'Баннер')+'</h2><label class="field"><span>Заголовок</span><input id="bT" value="'+esc(b.title)+'"></label><label class="field"><span>Подзаголовок</span><input id="bS" value="'+esc(b.subtitle||'')+'"></label><label class="field"><span>Ссылка на картинку</span><input id="bI" value="'+esc(b.imageUrl||'')+'"></label><label class="field"><span>Ссылка при нажатии</span><input id="bL" value="'+esc(b.linkUrl||'')+'"></label>'+
+   '<div class="row2"><label class="field"><span>Порядок</span><input id="bO" type="number" value="'+b.sortOrder+'"></label><div class="chk" style="align-items:end"><label><input type="checkbox" id="bA"'+(b.isActive?' checked':'')+'> Показывать</label></div></div><div id="bE" class="err hidden"></div>'+
+   '<div class="acts">'+(isNew?'':'<button class="btn bad" id="bD" style="margin-right:auto">Удалить</button>')+'<button class="btn ghost" id="bX">Отмена</button><button class="btn" id="bOk">Сохранить</button></div>');
+  m.querySelector('#bX').onclick=closeModal;
+  var d=m.querySelector('#bD');if(d)d.onclick=async function(){if(!await confirmBox('Удалить баннер «'+b.title+'»?','Удалить'))return;try{await api('/banners/'+b.id,{method:'DELETE'});toast('Удалено');navigate()}catch(e){toast(e.message)}};
+  m.querySelector('#bOk').onclick=async function(){
+    var body={title:m.querySelector('#bT').value.trim(),subtitle:m.querySelector('#bS').value.trim()||null,imageUrl:m.querySelector('#bI').value.trim()||null,linkUrl:m.querySelector('#bL').value.trim()||null,sortOrder:parseInt(m.querySelector('#bO').value,10)||0,isActive:m.querySelector('#bA').checked};
+    var er=m.querySelector('#bE');if(!body.title){er.textContent='Укажите заголовок';er.classList.remove('hidden');return}
+    try{if(isNew)await api('/banners',{method:'POST',body:body});else await api('/banners/'+b.id,{method:'PUT',body:body});closeModal();toast('Сохранено');navigate()}catch(e){er.textContent=e.message;er.classList.remove('hidden')}
+  };
+}
+async function viewPromos(){
+  var list=await api('/promocodes');
+  var rows=list.map(function(p){return '<tr><td><b>'+esc(p.code)+'</b></td><td>'+(p.discountType===0?num(p.discountValue)+'%':money(p.discountValue))+'</td><td>'+(p.expiresAt?dt(p.expiresAt):'без срока')+'</td><td>'+p.timesUsed+(p.usageLimit!=null?' / '+p.usageLimit:'')+'</td><td><button class="btn bad sm" data-del="'+esc(p.id)+'">Удалить</button></td></tr>'}).join('');
+  $('#main').innerHTML='<div class="bar"><button class="btn" id="pcAdd">+ Новый промокод</button></div><div class="tablewrap"><table><thead><tr><th>Код</th><th>Скидка</th><th>Действует до</th><th>Использован</th><th></th></tr></thead><tbody>'+(rows||'<tr><td colspan="5" class="muted">Промокодов нет</td></tr>')+'</tbody></table></div>';
+  $('#main').querySelectorAll('[data-del]').forEach(function(b){b.onclick=async function(){if(!await confirmBox('Удалить промокод?','Удалить'))return;try{await api('/promocodes/'+b.dataset.del,{method:'DELETE'});toast('Удалено');navigate()}catch(e){toast(e.message)}}});
+  $('#pcAdd').onclick=function(){
+    var m=modal('<h2>Новый промокод</h2><label class="field"><span>Код</span><input id="pC" style="text-transform:uppercase"></label><div class="row2"><label class="field"><span>Тип скидки</span><select id="pT"><option value="0">Процент</option><option value="1">Фиксированная сумма</option></select></label><label class="field"><span>Размер скидки</span><input id="pV" type="number" min="0" step="0.01"></label></div><div class="row2"><label class="field"><span>Действует до (необязательно)</span><input id="pE" type="date"></label><label class="field"><span>Лимит использований</span><input id="pL" type="number" min="1" placeholder="без лимита"></label></div><div id="pErr" class="err hidden"></div><div class="acts"><button class="btn ghost" id="pX">Отмена</button><button class="btn" id="pOk">Создать</button></div>');
+    m.querySelector('#pX').onclick=closeModal;
+    m.querySelector('#pOk').onclick=async function(){
+      var er=m.querySelector('#pErr'),code=m.querySelector('#pC').value.trim().toUpperCase(),val=parseFloat(m.querySelector('#pV').value),ex=m.querySelector('#pE').value,lim=m.querySelector('#pL').value;
+      if(!code||!(val>0)){er.textContent='Укажите код и размер скидки';er.classList.remove('hidden');return}
+      try{await api('/promocodes',{method:'POST',body:{code:code,discountType:+m.querySelector('#pT').value,discountValue:val,expiresAt:ex?new Date(ex+'T23:59:59').toISOString():null,usageLimit:lim?parseInt(lim,10):null}});closeModal();toast('Промокод создан');navigate()}catch(e){er.textContent=e.message;er.classList.remove('hidden')}
     };
-  });
+  };
 }
 
 // ---------- товары ----------
 var pq={page:1,search:''};
 var cat={cats:null,brands:null};
-async function ensureCat(){
-  if(!cat.cats)cat.cats=await api('/catalog/categories',{noAuth:true});
-  if(!cat.brands)cat.brands=await api('/catalog/brands',{noAuth:true});
-}
+async function ensureCat(){if(!cat.cats)cat.cats=await api('/catalog/categories',{noAuth:true});if(!cat.brands)cat.brands=await api('/catalog/brands',{noAuth:true})}
 async function viewProducts(){
   await ensureCat();
   $('#main').innerHTML='<div class="bar"><input type="search" id="pS" placeholder="Поиск товара" value="'+esc(pq.search)+'"><button class="btn" id="pNew">+ Добавить товар</button></div><div id="pT"></div>';
-  $('#pS').oninput=debounce(function(){pq.search=this.value.trim();pq.page=1;loadProducts()},350);
+  $('#pS').oninput=debounce(function(){pq.search=this.value.trim();pq.page=1;load()},350);
   $('#pNew').onclick=function(){editProduct(null)};
-  await loadProducts();
-}
-async function loadProducts(){
-  var r=await api('/admin/catalog/products?page='+pq.page+'&pageSize=20'+(pq.search?'&search='+encodeURIComponent(pq.search):''));
-  var box=$('#pT');if(!box)return;
-  var cn={};(cat.cats||[]).forEach(function(c){cn[c.id]=c.name});
-  var rows=r.items.map(function(p){
-    var img=(p.imageUrls&&p.imageUrls[0])?'<img class="th" loading="lazy" src="'+esc(p.imageUrls[0])+'" alt="">':'<div class="th"></div>';
-    return '<tr class="click" data-id="'+esc(p.id)+'"><td>'+img+'</td><td><b>'+esc(p.name)+'</b><div class="muted">'+esc(p.baseSku||'')+'</div></td><td>'+esc(cn[p.categoryId]||'')+'</td><td>'+money(p.minPrice)+'</td><td>'+(p.isActive?'<span class="pill s3">Виден</span>':'<span class="pill off">Скрыт</span>')+'</td></tr>';
-  }).join('');
-  box.innerHTML='<div class="tablewrap"><table><thead><tr><th></th><th>Товар</th><th>Категория</th><th>Цена от</th><th>Статус</th></tr></thead><tbody>'+(rows||'<tr><td colspan="5" class="muted">Товаров нет</td></tr>')+'</tbody></table></div>';
-  box.appendChild(pager(r.totalCount,r.page,r.pageSize,function(p){pq.page=p;loadProducts()}));
-  var map={};r.items.forEach(function(p){map[p.id]=p});
-  box.querySelectorAll('tr.click').forEach(function(tr){tr.onclick=function(){editProduct(map[tr.dataset.id])}});
+  async function load(){
+    var r=await api('/admin/catalog/products?page='+pq.page+'&pageSize=20'+(pq.search?'&search='+encodeURIComponent(pq.search):''));
+    var box=$('#pT');if(!box)return;var cn={};(cat.cats||[]).forEach(function(c){cn[c.id]=c.name});
+    var rows=r.items.map(function(p){var img=(p.imageUrls&&p.imageUrls[0])?'<img class="th" loading="lazy" src="'+esc(p.imageUrls[0])+'" alt="">':'<div class="th"></div>';
+      return '<tr class="click" data-id="'+esc(p.id)+'"><td>'+img+'</td><td><b>'+esc(p.name)+'</b><div class="muted">'+esc(p.baseSku||'')+'</div></td><td>'+esc(cn[p.categoryId]||'')+'</td><td>'+esc(money(p.minPrice))+'</td><td>'+(p.isActive?'<span class="pill p3">Виден</span>':'<span class="pill poff">Скрыт</span>')+'</td></tr>'}).join('');
+    box.innerHTML='<div class="tablewrap"><table><thead><tr><th></th><th>Товар</th><th>Категория</th><th>Цена от</th><th>Статус</th></tr></thead><tbody>'+(rows||'<tr><td colspan="5" class="muted">Товаров нет</td></tr>')+'</tbody></table></div>';
+    box.appendChild(pager(r.totalCount,r.page,r.pageSize,function(p){pq.page=p;load()}));
+    var map={};r.items.forEach(function(p){map[p.id]=p});
+    box.querySelectorAll('tr.click').forEach(function(tr){tr.onclick=function(){editProduct(map[tr.dataset.id],load)}});
+  }
+  state.reloadProducts=load;await load();
 }
 function opts(list,sel,empty){return (empty?'<option value="">'+empty+'</option>':'')+list.map(function(x){return '<option value="'+esc(x.id)+'"'+(x.id===sel?' selected':'')+'>'+esc(x.name)+'</option>'}).join('')}
 function varLine(v){v=v||{};return '<div class="line" data-v="'+esc(v.id||'')+'"><input placeholder="Размер" value="'+esc(v.size||'')+'"><input placeholder="Цвет" value="'+esc(v.color||'')+'"><input placeholder="Артикул (SKU)" value="'+esc(v.sku||'')+'"><input type="number" min="0" placeholder="Остаток" value="'+(v.stockQuantity==null?'':v.stockQuantity)+'"><button type="button" class="btn ghost sm rm">✕</button></div>'}
 function tierLine(t){t=t||{};return '<div class="line t"><input type="number" min="1" placeholder="От (шт)" value="'+(t.minQuantity||'')+'"><input type="number" min="0" step="0.01" placeholder="Цена за шт" value="'+(t.pricePerUnit==null?'':t.pricePerUnit)+'"><button type="button" class="btn ghost sm rm">✕</button></div>'}
-
-async function editProduct(p){
-  await ensureCat();
+async function editProduct(p,reload){
+  await ensureCat();reload=reload||state.reloadProducts;
   var isNew=!p;var det={variants:[],priceTiers:[]};
   if(p){try{det=await api('/catalog/products/'+p.id,{noAuth:true})}catch(e){return toast(e.message)}}
   p=p||{name:'',categoryId:(cat.cats[0]||{}).id,brandId:null,description:'',composition:'',baseSku:'',weightGrams:0,imageUrls:[],oldPrice:null,isNew:false,isHit:false,isActive:true};
-  var m=modal('<h2>'+(isNew?'Новый товар':'Товар')+'</h2>'+
-    '<label class="field"><span>Название</span><input id="fN" value="'+esc(p.name)+'"></label>'+
-    '<div class="row2"><label class="field"><span>Категория</span><select id="fC">'+opts(cat.cats,p.categoryId)+'</select></label>'+
-    '<label class="field"><span>Бренд</span><select id="fB">'+opts(cat.brands,p.brandId,'— без бренда —')+'</select></label></div>'+
-    '<div class="row3"><label class="field"><span>Артикул (SKU)</span><input id="fS" value="'+esc(p.baseSku||'')+'"></label>'+
-    '<label class="field"><span>Вес, г</span><input id="fW" type="number" min="0" value="'+(p.weightGrams||0)+'"></label>'+
-    '<label class="field"><span>Старая цена</span><input id="fO" type="number" min="0" step="0.01" value="'+(p.oldPrice==null?'':p.oldPrice)+'"></label></div>'+
-    '<label class="field"><span>Описание</span><textarea id="fD">'+esc(p.description||'')+'</textarea></label>'+
-    '<label class="field"><span>Состав</span><input id="fCo" value="'+esc(p.composition||'')+'"></label>'+
+  var m=modal('<h2>'+(isNew?'Новый товар':'Товар')+'</h2><label class="field"><span>Название</span><input id="fN" value="'+esc(p.name)+'"></label>'+
+    '<div class="row2"><label class="field"><span>Категория</span><select id="fC">'+opts(cat.cats,p.categoryId)+'</select></label><label class="field"><span>Бренд</span><select id="fB">'+opts(cat.brands,p.brandId,'— без бренда —')+'</select></label></div>'+
+    '<div class="row3"><label class="field"><span>Артикул (SKU)</span><input id="fS" value="'+esc(p.baseSku||'')+'"></label><label class="field"><span>Вес, г</span><input id="fW" type="number" min="0" value="'+(p.weightGrams||0)+'"></label><label class="field"><span>Старая цена</span><input id="fO" type="number" min="0" step="0.01" value="'+(p.oldPrice==null?'':p.oldPrice)+'"></label></div>'+
+    '<label class="field"><span>Описание</span><textarea id="fD">'+esc(p.description||'')+'</textarea></label><label class="field"><span>Состав</span><input id="fCo" value="'+esc(p.composition||'')+'"></label>'+
     '<label class="field"><span>Ссылки на фото (по одной в строке; первая — главная)</span><textarea id="fI">'+esc((p.imageUrls||[]).join('\n'))+'</textarea></label>'+
     '<div class="chk"><label><input type="checkbox" id="fNew"'+(p.isNew?' checked':'')+'> Новинка</label><label><input type="checkbox" id="fHit"'+(p.isHit?' checked':'')+'> Хит</label>'+(isNew?'':'<label><input type="checkbox" id="fAct"'+(p.isActive?' checked':'')+'> Показывать в каталоге</label>')+'</div>'+
-    '<div class="sub">Оптовые цены (чем больше штук, тем ниже цена)</div><div id="tiers">'+(det.priceTiers||[]).map(tierLine).join('')+'</div><button type="button" class="btn ghost sm" id="addT">+ Ступень цены</button>'+
-    '<div class="sub">Варианты и остатки</div><div id="vars">'+(det.variants||[]).map(varLine).join('')+'</div><button type="button" class="btn ghost sm" id="addV">+ Вариант</button>'+
-    '<div id="fErr" class="err hidden"></div>'+
-    '<div class="acts">'+(isNew?'':'<button class="btn bad" id="fDel" style="margin-right:auto">Удалить</button>')+'<button class="btn ghost" id="fX">Отмена</button><button class="btn" id="fOk">Сохранить</button></div>');
-  var removedVars=[];
-  function bindRm(root){root.querySelectorAll('.rm').forEach(function(b){b.onclick=function(){var l=b.parentNode;if(l.dataset.v)removedVars.push(l.dataset.v);l.remove()}})}
+    '<div class="sbh">Оптовые цены (чем больше штук, тем ниже цена)</div><div id="tiers">'+(det.priceTiers||[]).map(tierLine).join('')+'</div><button type="button" class="btn ghost sm" id="addT">+ Ступень цены</button>'+
+    '<div class="sbh">Варианты и остатки</div><div id="vars">'+(det.variants||[]).map(varLine).join('')+'</div><button type="button" class="btn ghost sm" id="addV">+ Вариант</button>'+
+    '<div id="fErr" class="err hidden"></div><div class="acts">'+(isNew?'':'<button class="btn bad" id="fDel" style="margin-right:auto">Удалить</button>')+'<button class="btn ghost" id="fX">Отмена</button><button class="btn" id="fOk">Сохранить</button></div>');
+  var removed=[];
+  function bindRm(root){root.querySelectorAll('.rm').forEach(function(b){b.onclick=function(){var l=b.parentNode;if(l.dataset.v)removed.push(l.dataset.v);l.remove()}})}
   bindRm(m);
   m.querySelector('#addT').onclick=function(){var d=document.createElement('div');d.innerHTML=tierLine();var n=d.firstChild;m.querySelector('#tiers').appendChild(n);bindRm(n)};
   m.querySelector('#addV').onclick=function(){var d=document.createElement('div');d.innerHTML=varLine();var n=d.firstChild;m.querySelector('#vars').appendChild(n);bindRm(n)};
   m.querySelector('#fX').onclick=closeModal;
   var del=m.querySelector('#fDel');
-  if(del)del.onclick=async function(){
-    if(!await confirmBox('Удалить товар «'+p.name+'» навсегда? Лучше просто скрыть его из каталога.','Удалить'))return;
-    try{await api('/admin/catalog/products/'+p.id,{method:'DELETE'});toast('Товар удалён');loadProducts()}catch(e){toast(e.message)}
-  };
+  if(del)del.onclick=async function(){if(!await confirmBox('Удалить товар «'+p.name+'» навсегда? Лучше просто скрыть его из каталога.','Удалить'))return;try{await api('/admin/catalog/products/'+p.id,{method:'DELETE'});toast('Товар удалён');dropCache();if(reload)reload()}catch(e){toast(e.message)}};
   m.querySelector('#fOk').onclick=async function(){
-    var er=m.querySelector('#fErr');er.classList.add('hidden');
-    var btn=m.querySelector('#fOk');
-    var name=m.querySelector('#fN').value.trim();
+    var er=m.querySelector('#fErr');er.classList.add('hidden');var btn=m.querySelector('#fOk');var name=m.querySelector('#fN').value.trim();
     if(!name){er.textContent='Укажите название';er.classList.remove('hidden');return}
     var tiers=[].map.call(m.querySelectorAll('#tiers .line'),function(l){var i=l.querySelectorAll('input');return {minQuantity:parseInt(i[0].value,10),pricePerUnit:parseFloat(i[1].value)}}).filter(function(t){return t.minQuantity>0&&t.pricePerUnit>=0});
     var vars=[].map.call(m.querySelectorAll('#vars .line'),function(l){var i=l.querySelectorAll('input');return {id:l.dataset.v||null,size:i[0].value.trim()||null,color:i[1].value.trim()||null,sku:i[2].value.trim(),stockQuantity:parseInt(i[3].value,10)||0}});
     if(vars.some(function(v){return !v.sku})){er.textContent='У каждого варианта нужен артикул (SKU)';er.classList.remove('hidden');return}
-    var body={name:name,categoryId:m.querySelector('#fC').value,brandId:m.querySelector('#fB').value||null,description:m.querySelector('#fD').value.trim()||null,composition:m.querySelector('#fCo').value.trim()||null,baseSku:m.querySelector('#fS').value.trim(),weightGrams:parseInt(m.querySelector('#fW').value,10)||0,
-      imageUrls:m.querySelector('#fI').value.split('\n').map(function(s){return s.trim()}).filter(Boolean),
-      oldPrice:m.querySelector('#fO').value===''?null:parseFloat(m.querySelector('#fO').value),isNew:m.querySelector('#fNew').checked,isHit:m.querySelector('#fHit').checked};
+    var body={name:name,categoryId:m.querySelector('#fC').value,brandId:m.querySelector('#fB').value||null,description:m.querySelector('#fD').value.trim()||null,composition:m.querySelector('#fCo').value.trim()||null,baseSku:m.querySelector('#fS').value.trim(),weightGrams:parseInt(m.querySelector('#fW').value,10)||0,imageUrls:m.querySelector('#fI').value.split('\n').map(function(s){return s.trim()}).filter(Boolean),oldPrice:m.querySelector('#fO').value===''?null:parseFloat(m.querySelector('#fO').value),isNew:m.querySelector('#fNew').checked,isHit:m.querySelector('#fHit').checked};
     btn.disabled=true;btn.textContent='Сохраняем…';
     try{
       var id=p.id;
       if(isNew){var c=await api('/admin/catalog/products',{method:'POST',body:body});id=c.id}
       else{await api('/admin/catalog/products/'+id,{method:'PUT',body:body});var act=m.querySelector('#fAct').checked;if(act!==p.isActive)await api('/admin/catalog/products/'+id+'/active',{method:'PUT',body:{isActive:act}})}
-      for(var k=0;k<removedVars.length;k++)await api('/admin/catalog/variants/'+removedVars[k],{method:'DELETE'});
-      for(var j=0;j<vars.length;j++){var v=vars[j];var vb={size:v.size,color:v.color,sku:v.sku,stockQuantity:v.stockQuantity};
-        if(v.id)await api('/admin/catalog/variants/'+v.id,{method:'PUT',body:vb});else await api('/admin/catalog/products/'+id+'/variants',{method:'POST',body:vb})}
+      for(var k=0;k<removed.length;k++)await api('/admin/catalog/variants/'+removed[k],{method:'DELETE'});
+      for(var j=0;j<vars.length;j++){var v=vars[j];var vb={size:v.size,color:v.color,sku:v.sku,stockQuantity:v.stockQuantity};if(v.id)await api('/admin/catalog/variants/'+v.id,{method:'PUT',body:vb});else await api('/admin/catalog/products/'+id+'/variants',{method:'POST',body:vb})}
       if(tiers.length||(det.priceTiers||[]).length)await api('/admin/catalog/products/'+id+'/price-tiers',{method:'PUT',body:{tiers:tiers}});
-      closeModal();toast('Сохранено');loadProducts();
+      closeModal();toast('Сохранено');dropCache();if(reload)reload();
     }catch(e){er.textContent=e.message;er.classList.remove('hidden');btn.disabled=false;btn.textContent='Сохранить'}
   };
 }
 
 // ---------- старт ----------
-if(state.tok){
-  var c=jwt(state.tok.accessToken);
-  if(c.role==='Admin'||c.role==='SuperAdmin')enter();else logout();
-}else showLogin();
+if(state.tok){var c0=jwt(state.tok.accessToken);if(c0.role==='Admin'||c0.role==='SuperAdmin')start();else logout()}else showLogin();
 })();
 </script>
 </body>
