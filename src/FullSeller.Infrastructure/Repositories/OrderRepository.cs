@@ -25,9 +25,11 @@ public class OrderRepository : SqlRepositoryBase, IOrderRepository
 
             using (var cmd = CreateCommand(conn, transaction, """
                 INSERT INTO Orders (Id, OrderNumber, UserId, Status, DeliveryCountry, AddressId,
-                                     PaymentMethod, TotalAmount, DeliveryCost, CargoTrackingNumber, CreatedAt)
+                                     PaymentMethod, TotalAmount, DeliveryCost, CargoTrackingNumber, CreatedAt,
+                                     ContactName, ContactPhone, AddressText, Comment, NotifyChannel)
                 VALUES (@Id, @OrderNumber, @UserId, @Status, @DeliveryCountry, @AddressId,
-                        @PaymentMethod, @TotalAmount, @DeliveryCost, @CargoTrackingNumber, @CreatedAt)
+                        @PaymentMethod, @TotalAmount, @DeliveryCost, @CargoTrackingNumber, @CreatedAt,
+                        @ContactName, @ContactPhone, @AddressText, @Comment, @NotifyChannel)
                 """))
             {
                 cmd.Parameters.AddWithValue("@Id", order.Id);
@@ -41,6 +43,11 @@ public class OrderRepository : SqlRepositoryBase, IOrderRepository
                 cmd.Parameters.AddWithValue("@DeliveryCost", order.DeliveryCost);
                 cmd.Parameters.AddWithValue("@CargoTrackingNumber", (object?)order.CargoTrackingNumber ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("@CreatedAt", order.CreatedAt);
+                cmd.Parameters.AddWithValue("@ContactName", (object?)order.ContactName ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@ContactPhone", (object?)order.ContactPhone ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@AddressText", (object?)order.AddressText ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Comment", (object?)order.Comment ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@NotifyChannel", order.NotifyChannel is null ? DBNull.Value : (object)(int)order.NotifyChannel.Value);
                 await cmd.ExecuteNonQueryAsync(ct);
             }
 
@@ -91,7 +98,8 @@ public class OrderRepository : SqlRepositoryBase, IOrderRepository
         Order? order;
         using (var cmd = CreateCommand(conn, tx, """
             SELECT Id, OrderNumber, UserId, Status, DeliveryCountry, AddressId,
-                   PaymentMethod, TotalAmount, DeliveryCost, CargoTrackingNumber, CreatedAt
+                   PaymentMethod, TotalAmount, DeliveryCost, CargoTrackingNumber, CreatedAt,
+                   ContactName, ContactPhone, AddressText, Comment, NotifyChannel
             FROM Orders WHERE Id = @Id
             """))
         {
@@ -129,7 +137,8 @@ public class OrderRepository : SqlRepositoryBase, IOrderRepository
 
         using var cmd = CreateCommand(conn, tx, """
             SELECT Id, OrderNumber, UserId, Status, DeliveryCountry, AddressId,
-                   PaymentMethod, TotalAmount, DeliveryCost, CargoTrackingNumber, CreatedAt
+                   PaymentMethod, TotalAmount, DeliveryCost, CargoTrackingNumber, CreatedAt,
+                   ContactName, ContactPhone, AddressText, Comment, NotifyChannel
             FROM Orders WHERE UserId = @UserId
             ORDER BY CreatedAt DESC
             OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY
@@ -300,5 +309,10 @@ public class OrderRepository : SqlRepositoryBase, IOrderRepository
         DeliveryCost = r.GetDecimal(8),
         CargoTrackingNumber = r.IsDBNull(9) ? null : r.GetString(9),
         CreatedAt = r.GetDateTime(10),
+        ContactName = r.IsDBNull(11) ? null : r.GetString(11),
+        ContactPhone = r.IsDBNull(12) ? null : r.GetString(12),
+        AddressText = r.IsDBNull(13) ? null : r.GetString(13),
+        Comment = r.IsDBNull(14) ? null : r.GetString(14),
+        NotifyChannel = r.IsDBNull(15) ? null : (OrderNotifyChannel)r.GetInt32(15),
     };
 }

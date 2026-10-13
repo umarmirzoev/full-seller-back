@@ -137,6 +137,13 @@ public class TelegramResetBotService : BackgroundService
         if (chatId == 0) return;
         var text = msg["text"]?.GetValue<string>()?.Trim() ?? string.Empty;
 
+        // 0) /myid — показать chat_id (нужен владельцу для OrderNotifications:Telegram:ChatId)
+        if (text.StartsWith("/myid", StringComparison.Ordinal))
+        {
+            await SendAsync(http, api, chatId, $"Ваш chat_id: <code>{chatId}</code>", ct);
+            return;
+        }
+
         // 1) /start reset_<nonce> — пришли из приложения
         if (text.StartsWith("/start", StringComparison.Ordinal))
         {

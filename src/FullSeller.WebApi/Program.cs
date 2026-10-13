@@ -43,6 +43,8 @@ builder.Services.AddScoped<PartnerService>();
 // Восстановление пароля через Telegram-бота (бесплатно вместо SMS).
 builder.Services.AddMemoryCache();
 builder.Services.AddHttpClient("telegram");
+builder.Services.AddHttpClient("orderNotify", c => c.Timeout = TimeSpan.FromSeconds(15));
+builder.Services.AddSingleton<OrderNotifier>();
 builder.Services.AddSingleton<PasswordResetTelegramStore>();
 builder.Services.AddHostedService<TelegramResetBotService>();
 

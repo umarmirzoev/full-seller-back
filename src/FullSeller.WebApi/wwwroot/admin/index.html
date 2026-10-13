@@ -199,6 +199,7 @@ function dkey(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0
 function dlabel(d){return String(d.getDate()).padStart(2,'0')+'.'+String(d.getMonth()+1).padStart(2,'0')}
 function lastDays(n){var a=[],t=new Date();t.setHours(0,0,0,0);for(var i=n-1;i>=0;i--){var d=new Date(t);d.setDate(t.getDate()-i);a.push(d)}return a}
 function toast(t){var el=$('#toast');el.textContent=t;el.classList.remove('hidden');clearTimeout(toast._t);toast._t=setTimeout(function(){el.classList.add('hidden')},2600)}
+function beep(){try{var C=window.AudioContext||window.webkitAudioContext;var a=new C();var o=a.createOscillator();var g=a.createGain();o.connect(g);g.connect(a.destination);o.frequency.value=880;g.gain.value=.08;o.start();setTimeout(function(){o.stop();a.close()},240)}catch(e){}}
 function debounce(fn,ms){var t;return function(){var a=arguments,c=this;clearTimeout(t);t=setTimeout(function(){fn.apply(c,a)},ms)}}
 var ICONS={
  dash:'<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>',
@@ -384,6 +385,23 @@ async function refreshBadges(){
   var t=badges.orders+badges.reviews;var bn=$('#bellN');bn.textContent=t;bn.classList.toggle('hidden',!t);
   renderNav();
 }
+async function pollNew(){
+  if(!state.tok)return;
+  try{
+    var d=await api('/admin/dashboard');var n=0;(d.ordersByStatus||[]).forEach(function(x){if(x.status===0)n=x.count});
+    var total=d.totalOrders;
+    var fresh=state.lastTotal!==undefined&&total>state.lastTotal;
+    state.lastTotal=total;badges.orders=n;
+    var t=badges.orders+badges.reviews;var bn=$('#bellN');bn.textContent=t;bn.classList.toggle('hidden',!t);
+    renderNav();
+    if(fresh){
+      toast('🛒 Новый заказ!');beep();dropCache();
+      var pg=route().page;
+      if(pg==='orders'&&state.reloadOrders)state.reloadOrders();
+      else if(pg==='dash')viewDash().catch(function(){});
+    }
+  }catch(e){}
+}
 function navigate(){
   var r=route();var f={dash:viewDash,orders:viewOrders,producers:viewProducers,products:viewProducts,clients:viewClients,reviews:viewReviews,finance:viewFinance,analytics:viewAnalytics,settings:viewSettings}[r.page];
   if(!f){location.hash='#/dash';return}
@@ -400,6 +418,7 @@ function start(){
   var c=jwt(state.tok.accessToken);state.role=c.role;
   $('#meN').textContent=c.role==='SuperAdmin'?'Суперадмин':'Админ';$('#meR').textContent='Администратор';
   navigate();
+  if(!state.pollT)state.pollT=setInterval(pollNew,20000);
 }
 
 // ---------- дашборд ----------
@@ -486,6 +505,9 @@ async function openOrder(id){
   var items=(o.items||[]).map(function(i){return '<tr><td>'+esc(i.productName)+'</td><td>'+i.quantity+'</td><td>'+esc(money(i.unitPrice))+'</td><td>'+esc(money(i.quantity*i.unitPrice))+'</td></tr>'}).join('');
   var hist=(h||[]).map(function(x){return '<div class="muted">'+dt(x.changedAt)+' — <b>'+ORDER_ST[x.status]+'</b>'+(x.comment?': '+esc(x.comment):'')+'</div>'}).join('');
   var m=modal('<h2>Заказ '+esc(o.orderNumber)+'</h2><div class="muted">'+dt(o.createdAt)+' · '+esc(COUNTRY[o.deliveryCountry]||'')+' · оплата: '+esc(PAY[o.paymentMethod]||'')+'</div>'+
+    '<div class="card" style="margin:12px 0;padding:12px 14px"><div><b>'+esc(o.contactName||'—')+'</b>'+(o.contactPhone?' · <a href="tel:'+esc(o.contactPhone)+'">'+esc(o.contactPhone)+'</a>':'')+'</div>'+
+    '<div class="muted" style="margin-top:4px">📍 '+esc(o.addressText||'адрес не указан')+'</div>'+
+    (o.comment?'<div class="muted" style="margin-top:4px">💬 '+esc(o.comment)+'</div>':'')+'</div>'+
     '<div class="tablewrap" style="margin:12px 0"><table style="min-width:420px"><thead><tr><th>Товар</th><th>Кол-во</th><th>Цена</th><th>Сумма</th></tr></thead><tbody>'+items+'</tbody></table></div>'+
     '<div>Доставка: <b>'+esc(money(o.deliveryCost))+'</b> · Итого: <b>'+esc(money(o.totalAmount))+'</b></div>'+
     '<div class="sbh">Сменить статус</div>'+

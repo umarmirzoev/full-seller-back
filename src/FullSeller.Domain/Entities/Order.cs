@@ -15,5 +15,10 @@ public class Order
     public decimal DeliveryCost { get; set; }
     public string? CargoTrackingNumber { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public string? ContactName { get; set; }
+    public string? ContactPhone { get; set; }
+    public string? AddressText { get; set; }
+    public string? Comment { get; set; }
+    public OrderNotifyChannel? NotifyChannel { get; set; }
     public List<OrderItem> Items { get; set; } = new();
 }

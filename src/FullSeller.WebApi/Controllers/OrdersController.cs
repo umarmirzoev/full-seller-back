@@ -29,7 +29,8 @@ public class OrdersController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<OrderDto>> CreateOrder([FromBody] CreateOrderRequest request, CancellationToken ct)
     {
-        var order = await _orderService.CreateOrderFromCartAsync(User.GetUserId(), request.AddressId, request.DeliveryCountry, request.PaymentMethod, ct);
+        var order = await _orderService.CreateOrderFromCartAsync(User.GetUserId(), request.AddressId, request.DeliveryCountry, request.PaymentMethod,
+            request.ContactName, request.Comment, request.NotifyChannel, ct);
         return Ok(await ToDtoAsync(order, ct));
     }
 
@@ -101,6 +102,7 @@ public class OrdersController : ControllerBase
 
         return new OrderDto(
             order.Id, order.OrderNumber, order.Status, order.DeliveryCountry, order.PaymentMethod,
-            order.TotalAmount, order.DeliveryCost, order.CargoTrackingNumber, order.CreatedAt, items);
+            order.TotalAmount, order.DeliveryCost, order.CargoTrackingNumber, order.CreatedAt, items,
+            order.ContactName, order.ContactPhone, order.AddressText, order.Comment);
     }
 }

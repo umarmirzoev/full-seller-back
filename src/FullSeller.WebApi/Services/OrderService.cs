@@ -13,20 +13,29 @@ public class OrderService
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICargoCalculator _cargoCalculator;
     private readonly INotificationRepository _notificationRepository;
+    private readonly OrderNotifier _notifier;
 
-    public OrderService(IUnitOfWork unitOfWork, ICargoCalculator cargoCalculator, INotificationRepository notificationRepository)
+    public OrderService(IUnitOfWork unitOfWork, ICargoCalculator cargoCalculator, INotificationRepository notificationRepository, OrderNotifier notifier)
     {
+        _notifier = notifier;
         _unitOfWork = unitOfWork;
         _cargoCalculator = cargoCalculator;
         _notificationRepository = notificationRepository;
     }
 
     public async Task<Order> CreateOrderFromCartAsync(
-        Guid userId, Guid addressId, DeliveryCountry country, PaymentMethod paymentMethod, CancellationToken ct)
+        Guid userId, Guid addressId, DeliveryCountry country, PaymentMethod paymentMethod,
+        string? contactName, string? comment, OrderNotifyChannel? notifyChannel, CancellationToken ct)
     {
         await _unitOfWork.BeginTransactionAsync(ct);
         try
         {
+            var user = await _unitOfWork.Users.GetByIdAsync(userId, ct)
+                ?? throw new NotFoundException(nameof(User), userId);
+            var address = await _unitOfWork.Addresses.GetByIdAsync(addressId, ct);
+            if (address is null || address.UserId != userId)
+                throw new ValidationException("Адрес доставки не найден. Выберите или добавьте адрес.");
+
             var cart = await _unitOfWork.Carts.GetOrCreateByUserIdAsync(userId, ct);
             if (cart.Items.Count == 0)
                 throw new ValidationException("Корзина пуста.");
@@ -52,6 +61,7 @@ public class OrderService
             var priceTierCache = new Dictionary<Guid, IReadOnlyList<Domain.Entities.PriceTier>>();
             decimal totalAmount = 0;
             var totalWeightGrams = 0;
+            var lines = new List<string>();
 
             foreach (var item in cart.Items)
             {
@@ -71,6 +81,9 @@ public class OrderService
                     Quantity = item.Quantity,
                     UnitPriceAtOrderTime = unitPrice,
                 });
+
+                var variantLabel = string.Join(" / ", new[] { variant.Size, variant.Color }.Where(x => !string.IsNullOrWhiteSpace(x)));
+                lines.Add($"{lines.Count + 1}. {product.Name}{(variantLabel.Length > 0 ? $" ({variantLabel})" : "")} — {item.Quantity} шт × {unitPrice:0} ₽ = {unitPrice * item.Quantity:0} ₽");
 
                 totalAmount += unitPrice * item.Quantity;
                 totalWeightGrams += product.WeightGrams * item.Quantity;
@@ -92,6 +105,11 @@ public class OrderService
                 TotalAmount = totalAmount + cargoQuote.TotalCost,
                 DeliveryCost = cargoQuote.TotalCost,
                 Items = orderItems,
+                ContactName = string.IsNullOrWhiteSpace(contactName) ? user.FullName : contactName.Trim(),
+                ContactPhone = user.Phone,
+                AddressText = $"{CountryLabel(address.Country)}, {address.City}, {address.Line}",
+                Comment = string.IsNullOrWhiteSpace(comment) ? null : comment.Trim(),
+                NotifyChannel = notifyChannel,
             };
 
             await _unitOfWork.Orders.CreateAsync(order, ct);
@@ -111,6 +129,9 @@ public class OrderService
             }, ct);
 
             await _unitOfWork.CommitAsync(ct);
+
+            // Автоотправка владельцу в выбранный клиентом мессенджер (не блокирует ответ клиенту, ошибки только в лог).
+            _notifier.Enqueue(notifyChannel ?? OrderNotifyChannel.Telegram, BuildNotificationText(order, lines));
             return order;
         }
         catch
@@ -118,6 +139,27 @@ public class OrderService
             await _unitOfWork.RollbackAsync(ct);
             throw;
         }
+    }
+
+    private static string CountryLabel(DeliveryCountry c) => c == DeliveryCountry.Russia ? "Россия" : "Таджикистан";
+
+    private static string BuildNotificationText(Order order, List<string> lines)
+    {
+        var sb = new System.Text.StringBuilder();
+        sb.AppendLine($"🛒 Новый заказ {order.OrderNumber}");
+        sb.AppendLine();
+        sb.AppendLine($"👤 {(string.IsNullOrWhiteSpace(order.ContactName) ? "—" : order.ContactName)}");
+        sb.AppendLine($"📞 {order.ContactPhone}");
+        sb.AppendLine($"📍 {order.AddressText}");
+        sb.AppendLine($"💳 Оплата: {(order.PaymentMethod == PaymentMethod.Invoice ? "по счёту" : "картой")}");
+        sb.AppendLine();
+        sb.AppendLine("Товары:");
+        foreach (var l in lines) sb.AppendLine(l);
+        sb.AppendLine();
+        sb.AppendLine($"🚚 Доставка: {order.DeliveryCost:0} ₽");
+        sb.AppendLine($"💰 Итого: {order.TotalAmount:0} ₽");
+        if (!string.IsNullOrWhiteSpace(order.Comment)) { sb.AppendLine(); sb.AppendLine($"💬 {order.Comment}"); }
+        return sb.ToString().TrimEnd();
     }
 
     public async Task<Order> RepeatOrderAsync(Guid userId, Guid sourceOrderId, CancellationToken ct)
