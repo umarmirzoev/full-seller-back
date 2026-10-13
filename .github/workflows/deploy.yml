@@ -22,6 +22,16 @@ jobs:
       - name: Publish
         run: dotnet publish src/FullSeller.WebApi/FullSeller.WebApi.csproj -c Release -o publish_output
 
+      - name: Write order notification config
+        run: |
+          cat > publish_output/appsettings.Production.json <<'JSON'
+          {
+            "OrderNotifications": {
+              "Telegram": { "ChatId": "7931205967" }
+            }
+          }
+          JSON
+
       - name: Setup SSH key
         uses: webfactory/ssh-agent@v0.9.0
         with:
