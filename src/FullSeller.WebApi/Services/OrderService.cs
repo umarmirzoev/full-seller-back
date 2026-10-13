@@ -141,7 +141,15 @@ public class OrderService
         }
     }
 
-    private static string CountryLabel(DeliveryCountry c) => c == DeliveryCountry.Russia ? "Россия" : "Таджикистан";
+    private static string CountryLabel(DeliveryCountry c) => c switch
+    {
+        DeliveryCountry.Russia => "Россия",
+        DeliveryCountry.Tajikistan => "Таджикистан",
+        DeliveryCountry.Uzbekistan => "Узбекистан",
+        DeliveryCountry.Kazakhstan => "Казахстан",
+        DeliveryCountry.Kyrgyzstan => "Кыргызстан",
+        _ => "Другая страна"
+    };
 
     private static string BuildNotificationText(Order order, List<string> lines)
     {

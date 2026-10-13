@@ -15,8 +15,9 @@ public class CargoCalculator : ICargoCalculator
 
     public async Task<CargoQuote> CalculateAsync(DeliveryCountry country, int totalWeightGrams, CancellationToken ct = default)
     {
-        var rate = await _cargoRates.GetByCountryAsync(country, ct)
-            ?? throw new InvalidOperationException($"Тариф карго для страны {country} не настроен.");
+        var rate = await _cargoRates.GetByCountryAsync(country, ct);
+        // Для стран без настроенного тарифа доставка не считается (0) — стоимость уточняет менеджер.
+        if (rate is null) return new CargoQuote(Math.Ceiling(totalWeightGrams / 1000m * 10) / 10, 0m, 0m, "RUB");
 
         var weightKg = Math.Ceiling(totalWeightGrams / 1000m * 10) / 10; // округление вверх до 0.1 кг
         var total = Math.Round(weightKg * rate.PricePerKg, 2);
